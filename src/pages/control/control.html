@@ -6,13 +6,39 @@
 -->
 <ion-header>
 
-  <ion-navbar>
-    <ion-title>control</ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <button ion-button menuToggle>
+            <ion-icon name="menu"></ion-icon>
+        </button>
+        <ion-title>Remote-Control</ion-title>
+    </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
-
+    <h4>Metallica<br>Wherever I may roam</h4>
+    <ion-item no-lines>
+        <!--<ion-badge item-end color="dark">{{time}}</ion-badge>-->
+        <!--<ion-badge item-end color="dark">{{time*10}}</ion-badge>-->
+        <!--<ion-badge item-end color="dark">{{newtime}}</ion-badge>-->
+        <ion-range min="0" max="7200" step="1" [(ngModel)]="time" (ionChange)="onChange($event)" color="secondary">
+            <ion-label range-left>0:00</ion-label>
+            <ion-label range-right>2:00:00</ion-label>
+        </ion-range>
+        <ion-badge id="timeBadge" item-end color="dark">{{newtime}}</ion-badge>
+    </ion-item>
+    <br>
+    <button ion-button icon-only>
+  <ion-icon name="skip-backward"></ion-icon>
+</button>
+    <button ion-button icon-only>
+  <ion-icon name="play"></ion-icon>
+</button>
+    <button ion-button icon-only>
+  <ion-icon name="pause"></ion-icon>
+</button>
+    <button ion-button icon-only>
+  <ion-icon name="skip-forward"></ion-icon>
+</button>
 </ion-content>
