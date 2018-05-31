@@ -3,7 +3,6 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
-import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { ControlPage } from '../pages/control/control';
 
@@ -15,15 +14,15 @@ export class MyApp {
 
   rootPage: any = ControlPage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{title: string, component: any, icon: string}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Remote-Control', component: ControlPage },
-      { title: 'List', component: ListPage }
+      { title: 'Remote-Control', component: ControlPage, icon: "musical-notes" },
+      { title: 'List', component: ListPage, icon: "list" }
     ];
 
   }

@@ -17,6 +17,7 @@ export class ControlPage {
 
   private time = 0;
   private newtime = "0:00:00";
+  private icon = "musical-notes";
   
   onChange(ev: any) {
     //console.log('Changed', ev);
