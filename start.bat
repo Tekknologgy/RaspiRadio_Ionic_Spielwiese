@@ -1,1 +1,0 @@
-ionic serve --browser chrome --lab
