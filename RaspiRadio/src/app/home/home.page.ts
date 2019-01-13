@@ -12,15 +12,22 @@ export class HomePage {
   }
   port;
   ip;
-
+  loading;
 
   async conn_rasp() {
-    if((this.ip & this.port) > 0){
+    if((this.ip & this.port) > 0) {
+      //placeholder function für conn test
       this.show_loading();
+      await this.delay(2000);   //wird ersetzt durch einen Funktionsaufruf der die Verbindung herstellt
     }
     else this.err_report();
-  }
+    
+    this.loading.dismiss();
+    //if connection ok -> dismiss & nav to login
+    //else dismiss & error
 
+    //this.loading.dismiss();
+  }
   async err_report() {
     const alert = await this.alertCtrl.create({
       header: 'Verbindung Fehlgeschlagen',
@@ -35,27 +42,15 @@ export class HomePage {
   }
 
   async show_loading() {
-    const loading = await this.loadingCtrl.create({
+    this.loading = await this.loadingCtrl.create({
       message:'Connecting...',
-      duration:2000
     });
-    /*
-    const alert = await this.alertCtrl.create({
-      header:'Verbindung Erfolgreich',
-      buttons: [{
-        text: 'Ok',
-        handler: () => {
-          alert.dismiss(false);
-          this.navCtrl.navigateForward('/login');
-        }
-      }]
-    });
-    */
-    //return await loading.present(),await alert.present();
-    
-    //await loading.onDidDismiss();
-    //this.navCtrl.navigateForward('/login');
-    
-    return await loading.present();
+    return await this.loading.present();
+  }
+
+  async delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 }
+
+    
