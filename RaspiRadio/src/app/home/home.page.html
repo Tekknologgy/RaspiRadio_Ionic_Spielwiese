@@ -12,18 +12,16 @@
 
   <ion-item lines="none">
     <ion-label color="primary" position="stacked">IP-Address</ion-label>
-    <div class="input">
-      <ion-input placeholder="e.g. 192.168.1.20" [(ngModel)]="ip" id="ip" text-left></ion-input>
-    </div>
+    <ion-input placeholder="e.g. 192.168.1.20" [(ngModel)]="ip" id="ip" class="input"></ion-input>
   </ion-item>
 
   <ion-item lines="none">
     <ion-label color="primary" position="stacked">Port</ion-label>
-    <div class="input">
-      <ion-input type="number" placeholder="e.g. 8800" [(ngModel)]="port" id="port"></ion-input>
-    </div>
+    <ion-input type="number" placeholder="e.g. 8800" [(ngModel)]="port" id="port" class="input"></ion-input>
   </ion-item>
-  <ion-item lines="none"></ion-item>
-  <ion-button (click)="conn_rasp()">Connect</ion-button>
+
+  <!--<ion-item lines="none"></ion-item>-->
+  
+  <ion-button (click)="conn_rasp()" class="button">Connect</ion-button>
 
 </ion-content>
