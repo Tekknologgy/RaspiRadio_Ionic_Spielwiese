@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController} from '@ionic/angular';
+import { promises } from 'fs';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +8,7 @@ import { AlertController, NavController, LoadingController} from '@ionic/angular
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl : NavController) {
-
-  }
+  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl : NavController) {}
   port;
   ip;
   loading;
@@ -52,5 +51,3 @@ export class HomePage {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 }
-
-    

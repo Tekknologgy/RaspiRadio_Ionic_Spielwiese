@@ -4,6 +4,22 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
 
+<!--nur aus test zwecken bzgl scrollen später soll er die einträge mit ngfor selbstständig erstellen je nachdem wieviele user bekannt sind-->
+<ion-content padding>
+  <ion-fab horizontal="start" vertical="center">
+    <ion-grid>
+      <ion-row>
+        <ion-fab-button color="danger" class="userbtn">user 1</ion-fab-button>
+        <ion-fab-button class="userbtn">user 2</ion-fab-button>    
+        <ion-fab-button class="userbtn">user 3</ion-fab-button>
+       <ion-fab-button class="userbtn">user 4</ion-fab-button>    
+     </ion-row>
+    </ion-grid>
+  </ion-fab>
+  <ion-fab horizontal="center" vertical="bottom">
+    <ion-fab-button class="useradd" href="/adduser">+</ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+
