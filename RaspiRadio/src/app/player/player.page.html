@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>player</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-item>
+        <ion-card class="">
+            <ion-card-header>
+                <!-- ändern des titelnamens je nachdem welcher titel abgespielt wird -->
+                <ion-card-title [(ngModel)]="Songname">{{Songname}}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-img src="/assets/test.png"></ion-img>
+            </ion-card-content>
+        </ion-card>
+    </ion-item>
+    <ion-item>
+        <ion-range min="0" max="10" color="tertiary" value={{durationtest}}>            
+            <ion-label slot="start">0:00</ion-label>
+            <!-- anzeige der liederlänge die abgespielt wird-->
+            <ion-label slot="end">{{Songduration}}</ion-label>
+        </ion-range>
+    </ion-item>
+    <ion-item>
+        <ion-tabs>
+            <ion-tab-bar slot="Bottom">
+                <ion-tab-button tab="Backwards" (click)="test()">
+                    <ion-icon name="Skip-backward"></ion-icon>
+                    <ion-label>Backwards</ion-label>
+                </ion-tab-button>    
+                <ion-tab-button tab="Play" (click)="test()">
+                    <ion-icon name="Play"></ion-icon>
+                    <ion-label>Play</ion-label>
+                </ion-tab-button>
+                <ion-tab-button tab="Stop" (click)="test()">
+                    <ion-icon name="Square"></ion-icon>
+                    <ion-label>Stop</ion-label>
+                </ion-tab-button>
+                <ion-tab-button tab="Forward" (click)="test()">
+                    <ion-icon name="skip-forward"></ion-icon>
+                    <ion-label>Forward</ion-label>
+                </ion-tab-button>
+            </ion-tab-bar>
+        </ion-tabs>
+    </ion-item>
+</ion-content>

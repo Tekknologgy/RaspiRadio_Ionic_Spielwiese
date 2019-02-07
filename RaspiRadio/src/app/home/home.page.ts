@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController} from '@ionic/angular';
-import { promises } from 'fs';
 
 @Component({
   selector: 'app-home',
@@ -46,7 +45,7 @@ export class HomePage {
     });
     return await this.loading.present();
   }
-
+  
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
