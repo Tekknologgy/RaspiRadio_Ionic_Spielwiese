@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>adduser</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+        <ion-title>Add User</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -11,9 +14,39 @@
         <ion-input type="text" placeholder="Username" [(ngModel)]="username" id="user" class="input"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-card>
-        Placeholder test
-      </ion-card>
-    </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button id="pink"></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="green"></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="black"></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="grey"></ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="liggrey"></ion-button>
+          </ion-col>  
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button id="usercolor">1</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="usercolor">2</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="usercolor">3</ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="usercolor">4</ion-button>
+          </ion-col>           
+        </ion-row>
+      </ion-grid>
+</ion-item>
   <ion-button href="/login">Save User</ion-button>
 </ion-content>
