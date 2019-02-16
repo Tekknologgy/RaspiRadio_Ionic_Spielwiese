@@ -17,34 +17,37 @@
       <ion-grid>
         <ion-row>
           <ion-col>
-            <ion-button id="pink"></ion-button>
+            <ion-button id="pink" (click)="getColor($event)" value="pink"></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="green"></ion-button>
+            <ion-button id="green" (click)="getColor($event)" value="green"></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="black"></ion-button>
+            <ion-button id="black" (click)="getColor($event)" value="black"></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="grey"></ion-button>
+            <ion-button id="grey" (click)="getColor($event)" value="grey"></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="liggrey"></ion-button>
-          </ion-col>  
+            <ion-button id="lightgrey" (click)="getColor($event)" value="lightgrey"></ion-button>
+          </ion-col>
         </ion-row>
         <ion-row>
           <ion-col>
-            <ion-button id="usercolor">1</ion-button>
+            <ion-button id="blue" (click)="getColor($event)" value="blue"></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="usercolor">2</ion-button>
+            <ion-button id="purple" (click)="getColor($event)"></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="usercolor">3</ion-button>
+            <ion-button id="yellow" (click)="getColor($event)" ></ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="usercolor">4</ion-button>
-          </ion-col>           
+            <ion-button id="orange" (click)="getColor($event)" ></ion-button>
+          </ion-col>
+          <ion-col>
+              <ion-button id="brown" (click)="getColor($event)" ></ion-button>
+            </ion-col>               
         </ion-row>
       </ion-grid>
 </ion-item>
