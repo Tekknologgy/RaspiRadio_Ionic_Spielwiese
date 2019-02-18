@@ -9,17 +9,18 @@ import { AlertController, NavController, LoadingController,MenuController} from 
 export class PlayerPage implements OnInit {
 
   constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl : NavController, public menCtrl: MenuController) { }
-  loading;
+  loading; 
   Songname;
   Songduration;
-  durationtest;
+  currsongtime;
   songtime;
   seconds;
   minutes;
   hours;
   Playerstate;
+  currDuration;
 
-  async backward(){
+  async backward(){  //function von backward (backend muss noch eingebaut werden)
     this.backward_test();
     await this.delay(2000);
     this.loading.dismiss();
@@ -31,7 +32,7 @@ export class PlayerPage implements OnInit {
     return await this.loading.present();
   }
 
-  async playpause(){
+  async playpause(){  //toggle function von play und pause mit ändern des symbols und des labels (backend muss noch eingebaut werden)
     this.playpause_test();
     await this.delay(2000);
     this.loading.dismiss();
@@ -49,7 +50,7 @@ export class PlayerPage implements OnInit {
     });
     return await this.loading.present();
   }
-  async stop(){
+  async stop(){ //function von stop (backend muss noch eingebaut werden)
     this.stop_test();
     await this.delay(2000);
     this.loading.dismiss();
@@ -60,7 +61,7 @@ export class PlayerPage implements OnInit {
     });
     return await this.loading.present();
   }
-  async forward(){
+  async forward(){ //function von forward (backend muss noch eingebaut werden)
     this.forward_test();
     await this.delay(2000);
     this.loading.dismiss();  
@@ -82,6 +83,37 @@ export class PlayerPage implements OnInit {
     }
     if(this.hours >= 1){
       this.minutes = this.minutes - (60*this.hours);
+    }
+    if(this.minutes < 10){
+      this.minutes = '0'+this.minutes;
+    }
+    if(this.hours < 10){
+      this.hours = '0'+this.hours;
+    }
+   this.Songduration = this.hours+":"+this.minutes+":"+this.seconds;
+
+  }
+
+  async songval(){  //dauer des liedes wird hier eingelesen und berechnet 
+    this.songtime = 4360;
+    this.seconds = this.songtime%60;
+    this.minutes = Math.floor(this.songtime/60);
+    this.hours = Math.floor(this.songtime/3600);
+    await this.songdur();
+  } 
+
+  async test(){ //test function für das ändern des sliders und des aktuellen laufzeit labels
+    this.currsongtime = 3070;
+    this.seconds = this.currsongtime%60;
+    this.minutes = Math.floor(this.currsongtime/60);
+    this.hours = Math.floor(this.currsongtime/3600);
+
+    if(this.seconds < 10){
+      this.seconds = '0'+this.seconds;
+      //console.log(this.minutes+"sekunden kontrolle");
+    }
+    if(this.hours >= 1){
+      this.minutes = this.minutes - (60*this.hours);
       //console.log(this.minutes+"stunden kontrolle")
     }
     if(this.minutes < 10){
@@ -91,26 +123,14 @@ export class PlayerPage implements OnInit {
     if(this.hours < 10){
       this.hours = '0'+this.hours;
     }
-   this.Songduration = this.hours+":"+this.minutes+":"+this.seconds;
-  }
-
-  async songval(){  //dauer des liedes wird hier eingelesen und berechnet 
-    //let min:number;
-    //min = 3;
-    //let max:number;
-    //max = 10;
-    //this.songtime = Math.random() * (max - min) +max;
-    this.songtime = 3727;
-    this.seconds = this.songtime%60;
-    this.minutes = Math.floor(this.songtime/60);
-    this.hours = Math.floor(this.songtime/3600);
-
-    await this.songdur();
+   this.currDuration = this.hours+":"+this.minutes+":"+this.seconds;
+    await console.log(this.currDuration);
   }
 
   ngOnInit() {
     this.Songname = "test";
     this.songval();
+    this.test();
     this.Playerstate = 'Play';
   }
 }

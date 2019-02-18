@@ -9,10 +9,10 @@
 
 <ion-app>
     <ion-content padding>
-        <ion-item>
-            <ion-card class="">
+        <ion-item class="playerBackground">
+            <ion-card class="player">
                 <ion-card-header>
-                        <!-- ändern des titelnamens je nachdem welcher titel abgespielt wird -->
+<!-- ändern des titelnamens je nachdem welcher titel abgespielt wird -->
                     <ion-card-title [(ngModel)]="Songname">{{Songname}}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
@@ -21,18 +21,16 @@
             </ion-card>
         </ion-item>
         <ion-item>
-            <ion-range min="0" max="10" color="tertiary" value={{durationtest}}>            
-                <ion-label slot="start">0:00</ion-label>
-                    <!-- anzeige der liederlänge die abgespielt wird-->
-                    <ion-label slot="end">{{Songduration}}</ion-label>
+            <ion-range min="0" max={{Songduration}} color="tertiary" value={{currDuration}} class="volSlider" (ionChange)="test()">       
+                <ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>
+<!-- anzeige der liederlänge die abgespielt wird-->
+                <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
             </ion-range>
         </ion-item>
         <ion-item>
-            <ion-tabs>
+            <ion-tabs >
                 <ion-tab-bar slot="Bottom">
-                        <!-- click funktion auf die tabs gelegt, atm wird nur ein load angzeigt
-                        die fehlermeldungen kommen da anscheinend iwo hardcoded hin navigiert werden sol
-                        das passiert hier nicht und das wirft nen fehler-->
+<!-- click funktion auf die tabs gelegt, atm wird nur ein load angzeigt die fehlermeldungen kommen da anscheinend iwo hardcoded hin navigiert werden soll das passiert hier nicht und das wirft nen fehler-->
                     <ion-tab-button tab="Backwards" (click)="backward()">
                         <ion-icon name="Skip-backward"></ion-icon>
                             <ion-label>Backwards</ion-label>
