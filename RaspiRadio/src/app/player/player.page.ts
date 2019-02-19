@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, NavController, LoadingController,MenuController} from '@ionic/angular';
 
+import { WebsocketService } from '../services/websocket.service';
+
+const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
+
 @Component({
   selector: 'app-player',
   templateUrl: './player.page.html',
@@ -8,7 +12,17 @@ import { AlertController, NavController, LoadingController,MenuController} from 
 })
 export class PlayerPage implements OnInit {
 
-  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl : NavController, public menCtrl: MenuController) { }
+  private mywebsocket;
+  private incoming;
+
+  constructor(
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    public navCtrl : NavController,
+    public menCtrl: MenuController,
+    private wsService: WebsocketService
+  ) { }
+
   loading; 
   Songname;
   Songduration;
@@ -33,14 +47,18 @@ export class PlayerPage implements OnInit {
   }
 
   async playpause(){  //toggle function von play und pause mit ändern des symbols und des labels (backend muss noch eingebaut werden)
-    this.playpause_test();
-    await this.delay(2000);
-    this.loading.dismiss();
+    //this.playpause_test();
+    //await this.delay(2000);
+    //this.loading.dismiss();
     if(this.Playerstate == 'Play'){
       this.Playerstate = 'Pause';
+      var data = JSON.stringify({"Action": "Pause","PauseStatus": 0});
+      this.mywebsocket.next(data);
       await console.log(this.Playerstate);
     }else if(this.Playerstate == 'Pause'){
       this.Playerstate = 'Play';
+      var data = JSON.stringify({"Action": "Pause","PauseStatus": 1});
+      this.mywebsocket.next(data);
       await console.log(this.Playerstate);
     }
   }
@@ -132,5 +150,12 @@ export class PlayerPage implements OnInit {
     this.songval();
     this.test();
     this.Playerstate = 'Play';
+    this.mywebsocket = this.wsService.connect(RaspiRadio_URL);
+    this.mywebsocket.subscribe(
+      (next) => {
+        this.incoming = next.data;
+      }
+    )
   }
+
 }
