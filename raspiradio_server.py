@@ -23,23 +23,49 @@ async def hello(websocket, path):
         # die entsprechenden Aktionen ausgeführt. Manche Aktionen
         # benötigen weitere Übergabewerte wie zB in "setVolume".
         # Andere, wie zB in Play, nicht.
+        
+        ### setVolume
         if parsed_json['Action'] == "setVolume":
-            client.setvol(parsed_json['newVolume'])
-            print("JSON volume change")
+            #print("JSON volume change")
+            try:
+                client.setvol(parsed_json['newVolume'])
+            except:
+                client.connect("localhost", 6600)
+                client.setvol(parsed_json['newVolume'])
+                #print("Exception")
+        ### Play
         if parsed_json['Action'] == "Play":
-            client.play(1)
-            print('JSON play')
+            #print('JSON play')
+            try:
+                client.play(1)
+            except:
+                client.connect("localhost", 6600)
+                client.play(1)
+                #print("Exception")
+        ### Pause
         if parsed_json['Action'] == "Pause":
-            client.pause(parsed_json['PauseStatus'])
-            print("JSON pause")
+            #print("JSON pause")
+            try:
+                client.pause(parsed_json['PauseStatus'])
+            except:
+                client.connect("localhost", 6600)
+                client.pause(parsed_json['PauseStatus'])
+                #print("Exception")
+        ### Stop
         if parsed_json['Action'] == "Stop":
-            client.stop()
-            print("JSON Stop")
+            #print("JSON Stop")
+            try:
+                client.stop()
+            except:
+                client.connect("localhost", 6600)
+                client.stop()
+                #print("Exception")
 
 # Hier wird der Websocket-Server gestartet
-start_server = websockets.serve(hello, '192.168.0.10', 8765)
+start_server = websockets.serve(hello, '192.168.1.35', 8765)
 
 # Und das wird als Loop für die asynchronen Funktionen benötigt
 # Wie es genau funktioniert, wissen wir noch nicht.
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
+
