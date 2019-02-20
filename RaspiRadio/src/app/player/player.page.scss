@@ -1,4 +1,4 @@
-.player{
+.player {
     margin-top:15%;
 }
 
@@ -6,16 +6,43 @@ ion-tab-bar {
     height: 70px;
 }
 
-.volSlider{
+.volSlider {
     width: max;
 //    margin-left: 5%;
 //    margin-right: 5%;
 }
 
-.playerBackground{
+.playerBackground {
     margin-top:15%;
 }
 
-.playerLabel{
+.playerLabel {
     font-size: 12px;
+}
+
+.Controls {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.Control {
+    float: left;
+    //padding-left: 19px;
+    //padding-right: 19px;
+    width: 20%;
+    text-align: center;
+    margin: auto;
+}
+
+.ControlLabel {
+    font-size: 12px;
+    color: #555555
+}
+
+.ControlIcon {
+    font-size: 20px;
+    color: #555555
 }

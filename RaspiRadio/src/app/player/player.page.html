@@ -13,7 +13,7 @@
             <ion-card class="player">
                 <ion-card-header>
 <!-- ändern des titelnamens je nachdem welcher titel abgespielt wird -->
-                    <ion-card-title [(ngModel)]="Songname">{{Songname}}</ion-card-title>
+                    <ion-card-title [(ngModel)]="Songname" ngDefaultControl>{{Songname}}</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
                     <ion-img src="/assets/test.png"></ion-img>
@@ -27,20 +27,43 @@
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
             </ion-range>
         </ion-item>
+        <!--NEUES MENÜ MIT DIVS & CSS - OHNE FEHLERMELDUNGEN
+        ############################################################-->
+        <ion-item>
+            <div class="Controls">
+                <div class="Control" (click)="backward()">
+                    <ion-icon name="skip-backward" class="ControlIcon"></ion-icon>
+                    <ion-label class="ControlLabel">Backward</ion-label>
+                </div>
+                <div class="Control" (click)="playpause()">
+                    <ion-icon name="{{Playerstate}}" class="ControlIcon"></ion-icon>
+                    <ion-label class="ControlLabel">{{Playerstate}}</ion-label>
+                </div>
+                <div class="Control" (click)="stop()">
+                    <ion-icon name="square" class="ControlIcon"></ion-icon>
+                    <ion-label class="ControlLabel">Stop</ion-label>
+                </div>
+                <div class="Control" (click)="forward()">
+                    <ion-icon name="skip-forward" class="ControlIcon"></ion-icon>
+                    <ion-label class="ControlLabel">Forward</ion-label>
+                </div>
+            </div>
+        </ion-item>
+        <!--########################################################-->
         <ion-item>
             <ion-tabs >
                 <ion-tab-bar slot="Bottom">
 <!-- click funktion auf die tabs gelegt, atm wird nur ein load angzeigt die fehlermeldungen kommen da anscheinend iwo hardcoded hin navigiert werden soll das passiert hier nicht und das wirft nen fehler-->
                     <ion-tab-button tab="Backwards" (click)="backward()">
-                        <ion-icon name="Skip-backward"></ion-icon>
-                            <ion-label>Backwards</ion-label>
+                        <ion-icon name="skip-backward"></ion-icon>
+                            <ion-label>Backward</ion-label>
                     </ion-tab-button>    
                     <ion-tab-button tab="Play" (click)="playpause()">
                         <ion-icon name="{{Playerstate}}"></ion-icon>
                             <ion-label>{{Playerstate}}</ion-label>
                     </ion-tab-button>
                     <ion-tab-button tab="Stop" (click)="stop()">
-                        <ion-icon name="Square"></ion-icon>
+                        <ion-icon name="square"></ion-icon>
                             <ion-label>Stop</ion-label>
                     </ion-tab-button>
                         <ion-tab-button tab="Forward" (click)="forward()">
