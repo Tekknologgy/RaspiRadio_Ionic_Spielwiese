@@ -11,7 +11,6 @@ export class AdduserPage implements OnInit {
   constructor(public navCtrl : NavController) {}
   
  async getColor($event) { 
-  await console.log(this.username);
   await console.log($event.target.id);
 }
 
