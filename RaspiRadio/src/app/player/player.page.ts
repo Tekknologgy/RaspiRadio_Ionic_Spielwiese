@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, NavController, LoadingController,MenuController} from '@ionic/angular';
-
 import { WebsocketService } from '../services/websocket.service';
 
 const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
@@ -21,18 +20,10 @@ export class PlayerPage implements OnInit {
     public navCtrl : NavController,
     public menCtrl: MenuController,
     private wsService: WebsocketService
-  ) { }
+  ){}
 
-  loading; 
-  Songname;
-  Songduration;
-  currsongtime;
-  songtime;
-  seconds;
-  minutes;
-  hours;
-  Playerstate;
-  currDuration;
+  loading; Songname; Playerstate; Interpret; //playervariablen
+  seconds; minutes; hours; songtime; Songduration; currsongtime; currDuration;  //zeiten
 
   async backward(){  //function von backward (backend muss noch eingebaut werden)
     this.backward_test();
@@ -47,9 +38,6 @@ export class PlayerPage implements OnInit {
   }
 
   async playpause(){  //toggle function von play und pause mit ändern des symbols und des labels (backend muss noch eingebaut werden)
-    //this.playpause_test();
-    //await this.delay(2000);
-    //this.loading.dismiss();
     if(this.Playerstate == 'Play'){
       this.Playerstate = 'Pause';
       var data = JSON.stringify({"Action": "Pause","PauseStatus": 0});
@@ -93,11 +81,9 @@ export class PlayerPage implements OnInit {
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
-
   async songdur(){ //hier wird er nochmal kontrolliert bzgl führender 0en etc und ausgegeben
     if(this.seconds < 10){
       this.seconds = '0'+this.seconds;
-      //console.log(this.minutes+"sekunden kontrolle");
     }
     if(this.hours >= 1){
       this.minutes = this.minutes - (60*this.hours);
@@ -109,7 +95,6 @@ export class PlayerPage implements OnInit {
       this.hours = '0'+this.hours;
     }
    this.Songduration = this.hours+":"+this.minutes+":"+this.seconds;
-
   }
 
   async songval(){  //dauer des liedes wird hier eingelesen und berechnet 
@@ -118,14 +103,14 @@ export class PlayerPage implements OnInit {
     this.minutes = Math.floor(this.songtime/60);
     this.hours = Math.floor(this.songtime/3600);
     await this.songdur();
-  } 
+  }
 
   async test(){ //test function für das ändern des sliders und des aktuellen laufzeit labels
     this.currsongtime = 3070;
     this.seconds = this.currsongtime%60;
     this.minutes = Math.floor(this.currsongtime/60);
     this.hours = Math.floor(this.currsongtime/3600);
-
+  
     if(this.seconds < 10){
       this.seconds = '0'+this.seconds;
       //console.log(this.minutes+"sekunden kontrolle");
@@ -145,8 +130,9 @@ export class PlayerPage implements OnInit {
     await console.log(this.currDuration);
   }
 
-  ngOnInit() {
+  ngOnInit() {//{{currTitel}}
     this.Songname = "test";
+    this.Interpret ="testband";
     this.songval();
     this.test();
     this.Playerstate = 'Play';
@@ -157,5 +143,4 @@ export class PlayerPage implements OnInit {
       }
     )
   }
-
 }
