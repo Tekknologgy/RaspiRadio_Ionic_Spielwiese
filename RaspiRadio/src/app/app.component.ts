@@ -20,6 +20,7 @@ export class AppComponent {
     {title: 'Help', url:'/help', icon:"help-circle"},
     {title: 'Credits', url:'/credits', icon:"bulb"}
   ]
+
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
