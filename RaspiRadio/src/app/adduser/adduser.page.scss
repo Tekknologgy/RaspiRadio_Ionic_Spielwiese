@@ -8,8 +8,10 @@
     //width: 200px;
     //height: 15px;    
 }
-#pink{
-    --background: #ff33cc;
+
+//First Row of Colors
+#red{
+    --background: crimson;
 }
 #green{
     --background: green;
@@ -23,24 +25,26 @@
 #lightgrey{
     --background: lightgrey;
 }
-#blue{
-    --background: blue;
+#white{
+    --background: white;
 }
-#purple{
-    --background: purple;
+
+//Second Row of Colors
+#orange{
+    --background: orange;
 }
 #yellow{
     --background: yellow;
 }
-#orange{
-    --background: orange;
+#pink{
+    --background: deeppink;
 }
-#brown{
-    --background: brown;
+#violet{
+    --background: darkviolet;
 }
-#babyblue{
-    --background: #6699ff;
+#blue{
+    --background: blue;
 }
-#red{
-    --background: #990000;
+#lightblue{
+    --background: lightskyblue;
 }

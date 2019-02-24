@@ -19,9 +19,7 @@ export class AdduserPage implements OnInit {
   
  async getColor($event) { 
   this.bg = $event.target.id;
-  await console.log(this.bg);
-  await console.log($event.target.id);
-  
+  //await console.log($event.target.id);
 }
 
   async saveuser(){
