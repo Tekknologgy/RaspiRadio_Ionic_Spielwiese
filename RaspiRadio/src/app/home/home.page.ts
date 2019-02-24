@@ -7,13 +7,19 @@ import { AlertController, NavController, LoadingController } from '@ionic/angula
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  constructor(public alertCtrl: AlertController, public loadingCtrl: LoadingController, public navCtrl : NavController) {}
-  port;
-  ip;
+
+  ip = "teilchen.ddns.net";
+  port = 8765;
   loading;
+  
+  constructor(
+    public alertCtrl: AlertController,
+    public loadingCtrl: LoadingController,
+    public navCtrl : NavController
+  ) {}
 
   async conn_rasp() {
-    if((this.ip & this.port) > 0) {
+    if((this.ip > "") && (this.port > 0)) {
       //placeholder function für conn test
       this.show_loading();
       await this.delay(2000);   //wird ersetzt durch einen Funktionsaufruf der die Verbindung herstellt
