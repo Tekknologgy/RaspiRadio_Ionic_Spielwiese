@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, NavController, LoadingController,MenuController} from '@ionic/angular';
 import { WebsocketService } from '../services/websocket.service';
+import { PlayState } from '@angular/core/src/render3/interfaces/player';
+import { resource } from 'selenium-webdriver/http';
 
 const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
 
@@ -12,7 +14,6 @@ const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
 export class PlayerPage implements OnInit {
 
   private mywebsocket;
-  private incoming;
 
   constructor(
     public alertCtrl: AlertController,
@@ -23,64 +24,92 @@ export class PlayerPage implements OnInit {
   ){}
 
   loading; Songname; Playerstate; Interpret; //playervariablen
-  seconds; minutes; hours; songtime; Songduration; currsongtime; currDuration;  //zeiten
+  Songduration; currsongtime; currDuration;  //zeiten
+  //seconds; minutes; hours; songtime;    DEAKTIVIERT WEIL JETZT IN FUNKTION MIT ÜBERGABE & RÜCKGABEWERT
 
-  async backward(){  //function von backward (backend muss noch eingebaut werden)
-    this.backward_test();
-    await this.delay(2000);
-    this.loading.dismiss();
+  private sliderMax;
+  private sliderValue;
+
+  async SliderChanged() {
+    //console.log("Slider Changed: "+this.sliderValue)
+    this.secToTime(this.sliderValue).then((result) => this.currDuration = result);
+    var data = JSON.stringify({"Action": "setElapsed","newElapsed": this.sliderValue});
+    this.mywebsocket.next(data);
+}
+
+  async backward() {  //function von backward (backend muss noch eingebaut werden)
+    //this.backward_test();
+    //await this.delay(2000);
+    //this.loading.dismiss();
+    var data = JSON.stringify({"Action": "Previous"});
+    this.mywebsocket.next(data);
   }
+  /*
   async backward_test() {
     this.loading = await this.loadingCtrl.create({
       message:'backwards',
     });
     return await this.loading.present();
   }
+  */
 
   async playpause(){  //toggle function von play und pause mit ändern des symbols und des labels (backend muss noch eingebaut werden)
-    if(this.Playerstate == 'Play'){
+    if(this.Playerstate == 'Play') {
       this.Playerstate = 'Pause';
       var data = JSON.stringify({"Action": "Pause","PauseStatus": 0});
       this.mywebsocket.next(data);
-      await console.log(this.Playerstate);
-    }else if(this.Playerstate == 'Pause'){
+      //await console.log(this.Playerstate);
+    }
+    else if(this.Playerstate == 'Pause') {
       this.Playerstate = 'Play';
       var data = JSON.stringify({"Action": "Pause","PauseStatus": 1});
       this.mywebsocket.next(data);
-      await console.log(this.Playerstate);
+      //await console.log(this.Playerstate);
     }
   }
+  /*
   async playpause_test() {
     this.loading = await this.loadingCtrl.create({
       message:'play',
     });
     return await this.loading.present();
   }
-  async stop(){ //function von stop (backend muss noch eingebaut werden)
-    this.stop_test();
-    await this.delay(2000);
-    this.loading.dismiss();
+  */
+  async stop() { //function von stop (backend muss noch eingebaut werden)
+    //this.stop_test();
+    //await this.delay(2000);
+    //this.loading.dismiss();
+    var data = JSON.stringify({"Action": "Stop"});
+    this.mywebsocket.next(data);
   }
+  /*
   async stop_test() {
     this.loading = await this.loadingCtrl.create({
       message:'stop',
     });
     return await this.loading.present();
   }
+  */
   async forward(){ //function von forward (backend muss noch eingebaut werden)
-    this.forward_test();
-    await this.delay(2000);
-    this.loading.dismiss();  
+    //this.forward_test();
+    //await this.delay(2000);
+    //this.loading.dismiss();
+    var data = JSON.stringify({"Action": "Next"});
+    this.mywebsocket.next(data);
   }
+  /*
   async forward_test() {
     this.loading = await this.loadingCtrl.create({
       message:'foward',
     });
     return await this.loading.present();
   }
+  */
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
+
+  /*
   async songdur(){ //hier wird er nochmal kontrolliert bzgl führender 0en etc und ausgegeben
     if(this.seconds < 10){
       this.seconds = '0'+this.seconds;
@@ -129,18 +158,115 @@ export class PlayerPage implements OnInit {
    this.currDuration = this.hours+":"+this.minutes+":"+this.seconds;
     await console.log(this.currDuration);
   }
+  */
+
+  //***************************************************************
+  //endgültige Funktion zum Berechnen der hh:mm:ss aus den Sekunden
+  //***************************************************************
+  async secToTime(onlyseconds): Promise<string> {
+
+    let seconds = onlyseconds%60; //Berechnet den reinen Sekunden-Anteil
+    let str_seconds = ""; //Speichert die Sekunden als String mit führenden Nullen für die Ausgabe am Ende
+    let minutes = Math.floor(onlyseconds/60); //Berechnet den reinen Minuten-Anteil
+    let str_minutes = ""; //Speichert die Minuten als String mit führenden Nullen für die Ausgabe am Ende
+    let hours = Math.floor(onlyseconds/3600); //berechnet den reinen Stunden-Anteil
+    let str_hours = ""; //Speichert die Stunden als String mit führenden Nullen für die Ausgabe am Ende
+    let time = "";  //Speichert die zusammengesetzte Zeit als String für das Return
+  
+    //Führende Nullen bei den Sekunden
+    if(seconds < 10) {
+      str_seconds = '0'+seconds;
+      //console.log(minutes+"sekunden kontrolle");
+    }
+    else if(seconds > 10) {
+      str_seconds = String(seconds);
+    }
+
+    //Berechnet die Anzahl der Stunden
+    if(hours >= 1){
+      hours = minutes - (60*hours);
+      //console.log(this.minutes+"stunden kontrolle")
+    }
+
+    //Führende Nullen bei den Minuten
+    if(minutes < 10){
+      str_minutes = '0'+minutes;
+      //console.log(this.minutes+"minuten kontrolle");
+    }
+    else if(minutes > 10) {
+      str_minutes = String(minutes);
+    }
+
+    //Führende Nullen bei den Stunden
+    if(hours < 10){
+      str_hours = '0'+hours;
+    }
+    else if(hours > 10) {
+      str_hours = String(hours);
+    }
+
+    //Zusammensetzen des Strings für die Zeit
+    time = str_hours+":"+str_minutes+":"+str_seconds;
+
+    return time;
+    //await console.log(this.currDuration);
+  }
 
   ngOnInit() {//{{currTitel}}
-    this.Songname = "test";
-    this.Interpret ="testband";
-    this.songval();
-    this.test();
-    this.Playerstate = 'Play';
+    //this.Songname = "test";
+    //this.Interpret ="testband";
+    //this.songval();
+    //this.test();
+    //this.Playerstate = 'Play';
+
+    //Connect to Websocket and Subscribe to Messages
     this.mywebsocket = this.wsService.connect(RaspiRadio_URL);
     this.mywebsocket.subscribe(
       (next) => {
-        this.incoming = next.data;
+        //Parsen der JSON-Nachricht        
+        let parsed = JSON.parse(next.data);
+
+        //Wenn der Player-Status gesendet wurde werden die Elemente der Player Page aktualisiert
+        if(parsed['Action'] == 'State') {
+          this.Songname = parsed['Title']; //Setzt den Songnamen
+          this.Interpret = parsed['Artist']; //Setzt den Interpreten
+          this.sliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
+          this.sliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
+          this.secToTime(parsed['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
+          this.secToTime(parsed['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
+          //Volume fehlt noch
+          if(parsed['State'] == 'Playing') {
+            this.Playerstate = "Pause"; //etwas verwirrend, weil mit Playerstate "Pause" gemeint ist, dass das Pause-Symbol angezeigt werden soll und der Player gerade spielt
+          }
+          else if(parsed['State'] == 'Paused') {
+            this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
+          }
+        }
       }
     )
+
+    //Simuliert den Empfang von Daten über Websocket und setzt aktuelle Playerdaten
+    //wird entfernt, wenn Daten vom Websocket kommen
+    let testdata = JSON.stringify({"Action": "State","Title": "Nothing else matters","Artist": "Metallica","Duration": 180,"Elapsed": 120,"Volume": 80,"State": "Paused"});
+    let testdisplay = JSON.parse(testdata);
+    if(testdisplay['Action'] == 'State') {
+      this.Songname = testdisplay['Title'];
+      this.Interpret = testdisplay['Artist'];
+      this.sliderMax = testdisplay['Duration']; //setzt den Maximalwert des Sliders in Sekunden
+      this.sliderValue = testdisplay['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
+      this.secToTime(testdisplay['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
+      this.secToTime(testdisplay['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
+      //Volume fehlt noch
+      if(testdisplay['State'] == 'Playing') {
+        this.Playerstate = "Pause"; //etwas verwirrend, weil mit Playerstate gemeint ist, dass das Pause-Symbol angezeigt werden soll
+      }
+      else if(testdisplay['State'] == 'Paused') {
+        this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate gemeint ist, dass das Pause-Symbol angezeigt werden soll
+      }
+    }
+
+    //Send getState to get current Playerdata to display at Player open
+    var data = JSON.stringify({"Action": "getState"});
+    this.mywebsocket.next(data);
   }
 }

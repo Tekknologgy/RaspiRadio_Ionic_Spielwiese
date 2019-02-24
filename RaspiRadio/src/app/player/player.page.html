@@ -22,7 +22,8 @@
             </ion-card>
         </ion-item>
         <ion-item>
-            <ion-range min="0" max={{Songduration}} color="tertiary" value={{currDuration}} class="volSlider" (ionChange)="test()">       
+            <!--<ion-range min="0" max={{Songduration}} color="tertiary" value={{currDuration}} class="volSlider" (ionChange)="SliderChanged()">-->
+            <ion-range min="0" max={{sliderMax}} color="tertiary" class="volSlider" (ionChange)="SliderChanged()" [(ngModel)]="sliderValue">
                 <ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>
 <!-- anzeige der liederlänge die abgespielt wird-->
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
