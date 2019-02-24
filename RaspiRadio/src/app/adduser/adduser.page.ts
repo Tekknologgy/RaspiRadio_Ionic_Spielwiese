@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {NavController} from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { WebsocketService } from '../services/websocket.service';
 
 const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";

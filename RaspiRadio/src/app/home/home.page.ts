@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController, LoadingController} from '@ionic/angular';
+import { AlertController, NavController, LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
