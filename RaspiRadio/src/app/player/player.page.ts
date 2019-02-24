@@ -66,6 +66,12 @@ export class PlayerPage implements OnInit {
       this.mywebsocket.next(data);
       //await console.log(this.Playerstate);
     }
+    else if(this.Playerstate == 'Stop') {
+      this.Playerstate = 'Play';
+      var data = JSON.stringify({"Action": "Play"});
+      this.mywebsocket.next(data);
+      //await console.log(this.Playerstate);
+    }
   }
   /*
   async playpause_test() {
@@ -79,6 +85,7 @@ export class PlayerPage implements OnInit {
     //this.stop_test();
     //await this.delay(2000);
     //this.loading.dismiss();
+    this.Playerstate = "Stop";
     var data = JSON.stringify({"Action": "Stop"});
     this.mywebsocket.next(data);
   }
@@ -241,6 +248,9 @@ export class PlayerPage implements OnInit {
           else if(parsed['State'] == 'Paused') {
             this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
           }
+          else if(parsed['State'] == 'Stopped') {
+            this.Playerstate = "Stop"; //etwas verwirrend, weil mit Playerstate "Stop" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade gestoppt ist
+          }
         }
       }
     )
@@ -258,10 +268,13 @@ export class PlayerPage implements OnInit {
       this.secToTime(testdisplay['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
       //Volume fehlt noch
       if(testdisplay['State'] == 'Playing') {
-        this.Playerstate = "Pause"; //etwas verwirrend, weil mit Playerstate gemeint ist, dass das Pause-Symbol angezeigt werden soll
+        this.Playerstate = "Pause"; //etwas verwirrend, weil mit Playerstate "Pause" gemeint ist, dass das Pause-Symbol angezeigt werden soll
       }
       else if(testdisplay['State'] == 'Paused') {
-        this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate gemeint ist, dass das Pause-Symbol angezeigt werden soll
+        this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll
+      }
+      else if(testdisplay['State'] == 'Paused') {
+        this.Playerstate = "Stop"; //etwas verwirrend, weil mit Playerstate "Stop" gemeint ist, dass das Play-Symbol angezeigt werden soll
       }
     }
 
