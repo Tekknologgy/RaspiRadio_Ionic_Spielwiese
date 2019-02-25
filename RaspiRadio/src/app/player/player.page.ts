@@ -255,6 +255,7 @@ export class PlayerPage implements OnInit {
       }
     )
 
+    /*
     //Simuliert den Empfang von Daten über Websocket und setzt aktuelle Playerdaten
     //wird entfernt, wenn Daten vom Websocket kommen
     let testdata = JSON.stringify({"Action": "State","Title": "Nothing else matters","Artist": "Metallica","Duration": 180,"Elapsed": 120,"Volume": 80,"State": "Paused"});
@@ -277,9 +278,17 @@ export class PlayerPage implements OnInit {
         this.Playerstate = "Stop"; //etwas verwirrend, weil mit Playerstate "Stop" gemeint ist, dass das Play-Symbol angezeigt werden soll
       }
     }
+    */
+  }
+
+  async ngAfterViewInit() {
+
+    //Ein Delay damit der Server Zeit hat auf das connect zu reagieren
+    await this.delay(500);
 
     //Send getState to get current Playerdata to display at Player open
     var data = JSON.stringify({"Action": "getState"});
     this.mywebsocket.next(data);
+    console.log("Jetzt");
   }
 }

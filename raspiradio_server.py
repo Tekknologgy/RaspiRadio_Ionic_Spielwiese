@@ -61,6 +61,9 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.stop()
                     #print("Exception")
+            ### GetState
+            if parsed_json['Action'] == "getState":
+                await websocket.send('{"Action": "State","Title": "Testtitel","Artist": "BLAH","Duration": 180,"Elapsed": 120,"Volume": 80,"State": "Paused"}')
 
         except:
             #print("Exception")
