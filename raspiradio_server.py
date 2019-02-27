@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # WS server example
+#
 
 from mpd import MPDClient
 import json
