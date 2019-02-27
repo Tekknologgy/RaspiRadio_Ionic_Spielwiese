@@ -64,7 +64,7 @@ async def hello(websocket, path):
                     #print("Exception")
             ### GetState
             if parsed_json['Action'] == "getState":
-                await websocket.send('{"Action": "State","Title": "Testtitel","Artist": "BLAH","Duration": 180,"Elapsed": 120,"Volume": 80,"State": "Paused"}')
+                await websocket.send('{"Action": "State","Title": "Muuh","Artist": "Kuh","Duration": 70,"Elapsed": 55,"Volume": 60,"State": "Playing"}')
 
         except:
             #print("Exception")
@@ -72,7 +72,7 @@ async def hello(websocket, path):
 
 
 # Hier wird der Websocket-Server gestartet
-start_server = websockets.serve(hello, '192.168.1.35', 8765)
+start_server = websockets.serve(hello, '192.168.0.10', 8765)
 
 # Und das wird als Loop für die asynchronen Funktionen benötigt
 # Wie es genau funktioniert, wissen wir noch nicht.
