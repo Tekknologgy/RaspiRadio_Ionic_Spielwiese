@@ -13,7 +13,7 @@ export class AdduserPage implements OnInit {
 
   username:string;
   bg;
-  user=[
+  public user=[
     {id:''},
     {username:''},
     {bgcolor:''},
@@ -32,9 +32,6 @@ export class AdduserPage implements OnInit {
   }
 
   async saveuser(){
-    //await console.log(this.username);
-    //await console.log(this.bg);
-    //this.navCtrl.navigateForward('/login');
     this.user.push(
       {id:'1'},
       {username:this.username},
