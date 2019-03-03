@@ -23,7 +23,7 @@ export class PlayerPage implements OnInit {
     private wsService: WebsocketService
   ){}
 
-  loading; Songname; Playerstate; Interpret; Playerstate_label;Playerstate_icon //playervariablen
+  loading; Songname; Playerstate; Interpret; Playerstate_label;Playerstate_icon;vol_Icon; //playervariablen
   Songduration; currsongtime; currDuration;  //zeiten
 
   private sliderMax;
@@ -55,15 +55,10 @@ export class PlayerPage implements OnInit {
       var data = JSON.stringify({"Action": "Pause","PauseStatus": 1});
       this.mywebsocket.next(data);
     }
-   /* kommt weg weil oarasch
-      else if(this.Playerstate == 'Stop') { 
-      this.Playerstate = 'Play';
-      this.Playerstate_label ='play';
-      var data = JSON.stringify({"Action": "Play"});
-      this.mywebsocket.next(data);
-    }*/
   }
-
+  async test(){
+    await console.log("test");
+  }
   async stop() {
 
     this.Playerstate = "Stop";
@@ -80,7 +75,9 @@ export class PlayerPage implements OnInit {
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
-
+  async volChanged(){
+    
+  }
   async secToTime(onlyseconds): Promise<string> {
 
     let seconds = onlyseconds%60; //Berechnet den reinen Sekunden-Anteil
@@ -123,6 +120,7 @@ export class PlayerPage implements OnInit {
   }
 
   ngOnInit() {
+    this.vol_Icon = 'volume-low';
     this.Playerstate = 'Play'; //zum testen für sebi
     this.Playerstate_label = 'Play';
     this.Playerstate_icon = 'play';
