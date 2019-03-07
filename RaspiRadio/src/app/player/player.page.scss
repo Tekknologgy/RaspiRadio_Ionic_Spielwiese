@@ -7,6 +7,14 @@ ion-tab-bar {
 }
 
 .volSlider {
+   // transform: rotate(90deg);
+    position:fixed;
+    width: 72%;
+    z-index: 9999;
+    margin-right: -18.2%;
+}
+
+.songSlider{
     width: max;
 }
 
@@ -22,7 +30,6 @@ ion-tab-bar {
     margin-left: auto;
     margin-right: auto;
     width: 100%;
-    //margin-top: 18%;
     padding-bottom: 2%;
     display: flex;
     justify-content: center;
@@ -30,8 +37,6 @@ ion-tab-bar {
 
 .Control {
     float: left;
-    //padding-left: 19px;
-    //padding-right: 19px;
     width: 20%;
     text-align: center;
     margin: auto;
@@ -45,4 +50,8 @@ ion-tab-bar {
 .ControlIcon {
     font-size: 20px;
     color: #555555
+}
+
+.appBackground{
+    --background: url('/assets/app_background.jpg') no-repeat 100% 100%;
 }

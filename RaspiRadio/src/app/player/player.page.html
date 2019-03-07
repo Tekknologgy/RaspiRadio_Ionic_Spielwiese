@@ -1,13 +1,16 @@
 <ion-header>
-    <ion-toolbar>
+    <ion-toolbar >
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Player</ion-title>
-        </ion-toolbar>
+        <!--<ion-button slot="end" (click)="test()">
+            <ion-icon name="volume-high"></ion-icon>
+        </ion-button>-->
+    </ion-toolbar>    
 </ion-header>
 
-<ion-app>
+<ion-app class="appBackground">
     <ion-content padding>
         <ion-item class="playerBackground">
             <ion-card class="player">
@@ -22,23 +25,28 @@
             </ion-card>
         </ion-item>
         <ion-item>
-            <!--<ion-range min="0" max={{Songduration}} color="tertiary" value={{currDuration}} class="volSlider" (ionChange)="SliderChanged()">-->
-            <ion-range min="0" max={{sliderMax}} color="tertiary" class="volSlider" (ionChange)="SliderChanged()" [(ngModel)]="sliderValue">
+            <ion-button slot="end" (click)="test()">
+                <ion-icon name="{{vol_Icon}}"></ion-icon>
+            </ion-button>
+            <ion-range slot='start' class="volSlider"></ion-range>
+        </ion-item>
+        <ion-item>
+            <ion-range min="0" max={{sliderMax}} color="tertiary" class="songSlider" (ionChange)="SliderChanged()" [(ngModel)]="sliderValue">
                 <ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>
-<!-- anzeige der liederlänge die abgespielt wird-->
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
             </ion-range>
         </ion-item>
         <!--NEUES MENÜ MIT DIVS & CSS - OHNE FEHLERMELDUNGEN
         ############################################################-->
-        <ion-item>
+       <!--
+<ion-item>
             <div class="Controls">
                 <div class="Control" (click)="backward()">
                     <ion-icon name="skip-backward" class="ControlIcon"></ion-icon>
                     <ion-label class="ControlLabel">Backward</ion-label>
                 </div>
                 <div class="Control" (click)="playpause()">
-                    <ion-icon name="{{Playerstate}}" class="ControlIcon"></ion-icon>
+                    <ion-icon name="{{Playerstate_label}}" class="ControlIcon"></ion-icon>
                     <ion-label class="ControlLabel">{{Playerstate}}</ion-label>
                 </div>
                 <div class="Control" (click)="stop()">
@@ -51,6 +59,7 @@
                 </div>
             </div>
         </ion-item>
+       --> 
         <!--########################################################-->
         <ion-item>
             <ion-tabs >
@@ -60,13 +69,13 @@
                             <ion-label>Backward</ion-label>
                     </ion-tab-button>    
                     <ion-tab-button tab="Play" (click)="playpause()">
-                        <ion-icon name="{{Playerstate}}"></ion-icon>
-                            <ion-label>{{Playerstate}}</ion-label>
+                        <ion-icon name="{{Playerstate_icon}}"></ion-icon>
+                            <ion-label>{{Playerstate_label}}</ion-label>
                     </ion-tab-button>
-                    <ion-tab-button tab="Stop" (click)="stop()">
+                    <!--ion-tab-button tab="Stop" (click)="stop()">
                         <ion-icon name="square"></ion-icon>
                             <ion-label>Stop</ion-label>
-                    </ion-tab-button>
+                    </ion-tab-button>-->
                         <ion-tab-button tab="Forward" (click)="forward()">
                             <ion-icon name="skip-forward"></ion-icon>
                                 <ion-label>Forward</ion-label>

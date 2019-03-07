@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { GlobalVarService, } from '../services/global-var.service';
+
 
 @Component({
   selector: 'app-login',
@@ -6,10 +8,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  constructor() {
-}
+  user;
+  constructor() {}
 
   ngOnInit() {
+    
+    for(let e of this.user){
+      console.log(e);
+    }
   }
-
 }
