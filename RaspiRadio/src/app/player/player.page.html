@@ -28,10 +28,11 @@
             <ion-button slot="end" (click)="test()">
                 <ion-icon name="{{vol_Icon}}"></ion-icon>
             </ion-button>
-            <ion-range slot='start' class="volSlider"></ion-range>
+            <ion-range min="0" max="100" slot='start' class="volSlider" [(ngModel)]="volSliderValue" (mouseup)="volSliderChanged()" (touchend)="volSliderChanged()"></ion-range>
         </ion-item>
         <ion-item>
-            <ion-range min="0" max={{sliderMax}} color="tertiary" class="songSlider" (ionChange)="SliderChanged()" [(ngModel)]="sliderValue">
+            <!--(ionChange)="SliderChanged()" -->
+            <ion-range min="0" max={{trackSliderMax}} color="tertiary" class="songSlider" [(ngModel)]="trackSliderValue" (mouseup)="trackSliderChanged()" (touchend)="trackSliderChanged()">
                 <ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
             </ion-range>

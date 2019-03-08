@@ -24,17 +24,22 @@ export class PlayerPage implements OnInit {
     private wsService: WebsocketService
   ) {}
 
-  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; //playervariablen
+  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; volSliderValue;//playervariablen
   Songduration; currsongtime; currDuration;  //zeiten
 
-  private sliderMax;
-  private sliderValue;
+  private trackSliderMax;
+  private trackSliderValue;
 
-  async SliderChanged() {
-    this.secToTime(this.sliderValue).then((result) => this.currDuration = result);
-    var data = JSON.stringify({"Action": "setElapsed","newElapsed": this.sliderValue});
+  async trackSliderChanged() {
+    this.secToTime(this.trackSliderValue).then((result) => this.currDuration = result);
+    var data = JSON.stringify({"Action": "setElapsed","newElapsed": this.trackSliderValue});
     this.mywebsocket.next(data);
-}
+  }
+
+  async volSliderChanged() {
+    var data = JSON.stringify({"Action": "setVolume","newVolume": this.volSliderValue});
+    this.mywebsocket.next(data);
+  }
 
   async backward() { 
     var data = JSON.stringify({"Action": "Previous"});
@@ -131,8 +136,8 @@ export class PlayerPage implements OnInit {
         if(parsed['Action'] == 'State') {
           this.Songname = parsed['Title']; //Setzt den Songnamen
           this.Interpret = parsed['Artist']; //Setzt den Interpreten
-          this.sliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
-          this.sliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
+          this.trackSliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
+          this.trackSliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
           this.secToTime(parsed['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
           this.secToTime(parsed['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
           if(parsed['State'] == 'Playing') {
