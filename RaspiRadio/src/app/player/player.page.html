@@ -36,6 +36,38 @@
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
             </ion-range>
         </ion-item>
+        <ion-item>
+            <ion-tabs >
+                <ion-tab-bar slot="Bottom">
+                    <ion-tab-button tab="Shuffle" (click)="shuffle()">
+                        <ion-icon name="shuffle"></ion-icon>
+                        <ion-label>Shuffle</ion-label>
+                    </ion-tab-button>
+                    <ion-tab-button tab="Backwards" (click)="backward()">
+                        <ion-icon name="skip-backward"></ion-icon>
+                            <ion-label>Backward</ion-label>
+                    </ion-tab-button>    
+                    <ion-tab-button tab="Play" (click)="playpause()">
+                        <ion-icon name="{{Playerstate_icon}}"></ion-icon>
+                            <ion-label>{{Playerstate_label}}</ion-label>
+                    </ion-tab-button>
+                    <!--ion-tab-button tab="Stop" (click)="stop()">
+                        <ion-icon name="square"></ion-icon>
+                            <ion-label>Stop</ion-label>
+                    </ion-tab-button>-->
+                        <ion-tab-button tab="Forward" (click)="forward()">
+                            <ion-icon name="skip-forward"></ion-icon>
+                                <ion-label>Forward</ion-label>
+                    </ion-tab-button>
+                    <ion-tab-button tab="Repeat" (click)="repeat()">
+                        <ion-icon name="repeat"></ion-icon>
+                            <ion-label>Repeat</ion-label>
+                    </ion-tab-button>
+                </ion-tab-bar>
+            </ion-tabs>
+        </ion-item> 
+    </ion-content>
+</ion-app>
         <!--NEUES MENÜ MIT DIVS & CSS - OHNE FEHLERMELDUNGEN
         ############################################################-->
        <!--
@@ -61,27 +93,3 @@
         </ion-item>
        --> 
         <!--########################################################-->
-        <ion-item>
-            <ion-tabs >
-                <ion-tab-bar slot="Bottom">
-                    <ion-tab-button tab="Backwards" (click)="backward()">
-                        <ion-icon name="skip-backward"></ion-icon>
-                            <ion-label>Backward</ion-label>
-                    </ion-tab-button>    
-                    <ion-tab-button tab="Play" (click)="playpause()">
-                        <ion-icon name="{{Playerstate_icon}}"></ion-icon>
-                            <ion-label>{{Playerstate_label}}</ion-label>
-                    </ion-tab-button>
-                    <!--ion-tab-button tab="Stop" (click)="stop()">
-                        <ion-icon name="square"></ion-icon>
-                            <ion-label>Stop</ion-label>
-                    </ion-tab-button>-->
-                        <ion-tab-button tab="Forward" (click)="forward()">
-                            <ion-icon name="skip-forward"></ion-icon>
-                                <ion-label>Forward</ion-label>
-                    </ion-tab-button>
-                </ion-tab-bar>
-            </ion-tabs>
-        </ion-item> 
-    </ion-content>
-</ion-app>
