@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { AlertController, NavController, LoadingController,MenuController} from '@ionic/angular';
+import { AlertController, NavController, LoadingController,MenuController } from '@ionic/angular';
 import { WebsocketService } from '../services/websocket.service';
 import { PlayState } from '@angular/core/src/render3/interfaces/player';
 import { resource } from 'selenium-webdriver/http';
 
-//const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
-const RaspiRadio_URL = "";
+const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
+//const RaspiRadio_URL = "";
+
 @Component({
   selector: 'app-player',
   templateUrl: './player.page.html',
@@ -21,9 +22,9 @@ export class PlayerPage implements OnInit {
     public navCtrl : NavController,
     public menCtrl: MenuController,
     private wsService: WebsocketService
-  ){}
+  ) {}
 
-  loading; Songname; Playerstate; Interpret; Playerstate_label;Playerstate_icon;vol_Icon; //playervariablen
+  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; //playervariablen
   Songduration; currsongtime; currDuration;  //zeiten
 
   private sliderMax;
@@ -40,7 +41,7 @@ export class PlayerPage implements OnInit {
     this.mywebsocket.next(data);
   }
 
-  async playpause(){ 
+  async playpause() { 
     if(this.Playerstate == 'Play') {
       this.Playerstate = 'Pause';
       this.Playerstate_label = 'Pause';
@@ -56,18 +57,16 @@ export class PlayerPage implements OnInit {
       this.mywebsocket.next(data);
     }
   }
-  async test(){
+  async test() {
     await console.log("test");
   }
   async stop() {
-
     this.Playerstate = "Stop";
     var data = JSON.stringify({"Action": "Stop"});
     this.mywebsocket.next(data);
   }
 
-  async forward(){ 
-
+  async forward() { 
     var data = JSON.stringify({"Action": "Next"});
     this.mywebsocket.next(data);
   }
@@ -75,7 +74,7 @@ export class PlayerPage implements OnInit {
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
-  async volChanged(){
+  async volChanged() {
     
   }
   async secToTime(onlyseconds): Promise<string> {
@@ -96,18 +95,18 @@ export class PlayerPage implements OnInit {
       str_seconds = String(seconds);
     }
 
-    if(hours >= 1){
+    if(hours >= 1) {
       hours = minutes - (60*hours);
     }
 
-    if(minutes < 10){
+    if(minutes < 10) {
       str_minutes = '0'+minutes;
     }
     else if(minutes >= 10) {
       str_minutes = String(minutes);
     }
 
-    if(hours < 10){
+    if(hours < 10) {
       str_hours = '0'+hours;
     }
     else if(hours >= 10) {
@@ -142,9 +141,6 @@ export class PlayerPage implements OnInit {
           else if(parsed['State'] == 'Paused') {
             this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
           }
-          else if(parsed['State'] == 'Stopped') {
-            this.Playerstate = "Stop"; //etwas verwirrend, weil mit Playerstate "Stop" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade gestoppt ist
-          }
         }
       }
     )
@@ -153,6 +149,6 @@ export class PlayerPage implements OnInit {
     await this.delay(500);
     var data = JSON.stringify({"Action": "getState"});
     this.mywebsocket.next(data);
-  //  console.log("Jetzt");
+    //console.log("Jetzt");
   }
 }
