@@ -3,8 +3,9 @@ import { AlertController, NavController, LoadingController,MenuController } from
 import { WebsocketService } from '../services/websocket.service';
 import { PlayState } from '@angular/core/src/render3/interfaces/player';
 import { resource } from 'selenium-webdriver/http';
+import { Storage } from '@ionic/storage';
 
-const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
+//const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
 //const RaspiRadio_URL = "";
 
 @Component({
@@ -15,13 +16,18 @@ const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
 export class PlayerPage implements OnInit {
 
   private mywebsocket;
+  private ip;
+  private port;
+  private RaspiRadio_URL;
+  // = "ws://" + this.storage.get("IP") + ":" + this.storage.get("Port")
 
   constructor(
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public navCtrl : NavController,
     public menCtrl: MenuController,
-    private wsService: WebsocketService
+    private wsService: WebsocketService,
+    private storage: Storage
   ) {}
 
   loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; volSliderValue;//playervariablen
@@ -29,6 +35,21 @@ export class PlayerPage implements OnInit {
 
   private trackSliderMax;
   private trackSliderValue;
+
+  /*
+  //Die Funktion ist mit dem ebenfalls ausgeblendeten Button unterhalb der Tabs verbunden
+  async storage_test() {
+    this.storage.get('ip').then((val) => {
+      console.log('Your ip is ', val);
+      this.ip = val;
+    });
+    this.storage.get('port').then((val) => {
+      console.log('Your port is ', val);
+      this.port = val;
+    });
+    console.log("ws://" + this.ip + ":" + this.port);
+  }
+  */
 
   async trackSliderChanged() {
     this.secToTime(this.trackSliderValue).then((result) => this.currDuration = result);
@@ -123,12 +144,24 @@ export class PlayerPage implements OnInit {
     return time;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    //Das Storage braucht ein await, weil er sich sonst schon verbindet bevor er die URL hat.
+    //Das GET ist eine async Funktion und returned ein Promise, weswegen man den Wert erst aus den Promise lösen muss.
+    //Deswegen ist das ngOnInit jetzt auch ein async.
+    await this.storage.get('ip').then((val) => {
+      //console.log('Your ip is ', val);
+      this.ip = val;
+    });
+    await this.storage.get('port').then((val) => {
+      //console.log('Your port is ', val);
+      this.port = val;
+    });
+    this.RaspiRadio_URL = "ws://" + this.ip + ":" + this.port;  //Zusammensetzen der URL
     this.vol_Icon = 'volume-low';
     this.Playerstate = 'Play'; //zum testen für sebi
     this.Playerstate_label = 'Play';
     this.Playerstate_icon = 'play';
-    this.mywebsocket = this.wsService.connect(RaspiRadio_URL);
+    this.mywebsocket = this.wsService.connect(this.RaspiRadio_URL);
     this.mywebsocket.subscribe(
       (next) => {
         let parsed = JSON.parse(next.data);
