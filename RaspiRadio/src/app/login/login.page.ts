@@ -13,8 +13,10 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
     
+    /*
     for(let e of this.user){
       console.log(e);
     }
+    */
   }
 }
