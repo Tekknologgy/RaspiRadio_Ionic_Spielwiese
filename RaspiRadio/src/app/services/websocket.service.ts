@@ -14,7 +14,7 @@ export class WebsocketService {
   public connect(url): Rx.Subject<MessageEvent> {
     if (!this.subject) {
       this.subject = this.create(url);
-      console.log("Successfully connected: " + url);
+      //console.log("Successfully connected: " + url);    Wird auch ausgegeben, wenn das Connect nicht funktioniert - ergo: sinnlos - wenn ein connect misslingt gibts eh ne fehlermeldung in der console...
     }
     return this.subject;
   }
