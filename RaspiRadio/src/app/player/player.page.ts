@@ -161,6 +161,7 @@ export class PlayerPage implements OnInit {
     this.Playerstate = 'Play'; //zum testen für sebi
     this.Playerstate_label = 'Play';
     this.Playerstate_icon = 'play';
+
     this.mywebsocket = this.wsService.connect(this.RaspiRadio_URL);
     this.mywebsocket.subscribe(
       (next) => {
