@@ -7,6 +7,11 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-
+<ion-content>
+  <ion-list *ngFor="let p of playList">
+      <ion-item>
+        <ion-label>{{p.title}}</ion-label>
+        <ion-button (click)="optionPlaylist()">Test</ion-button>
+      </ion-item>
+  </ion-list>
 </ion-content>

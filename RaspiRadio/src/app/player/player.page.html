@@ -4,9 +4,6 @@
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Player</ion-title>
-        <!--<ion-button slot="end" (click)="test()">
-            <ion-icon name="volume-high"></ion-icon>
-        </ion-button>-->
     </ion-toolbar>    
 </ion-header>
 
@@ -15,7 +12,6 @@
         <ion-item class="playerBackground">
             <ion-card class="player">
                 <ion-card-header>
-<!-- ändern des titelnamens je nachdem welcher titel abgespielt wird -->
                     <ion-card-title [(ngModel)]="Songname" ngDefaultControl>{{Songname}}</ion-card-title>
                         <ion-card-subtitle>{{Interpret}}</ion-card-subtitle>
                 </ion-card-header>
@@ -32,7 +28,6 @@
             <ion-label slot="start" class="volLabel">{{volSliderValue}}</ion-label>
         </ion-item>
         <ion-item>
-            <!--(ionChange)="SliderChanged()" -->
             <ion-range min="0" max={{trackSliderMax}} color="tertiary" class="songSlider" [(ngModel)]="trackSliderValue" (mouseup)="trackSliderChanged()" (touchend)="trackSliderChanged()">
                 <ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
@@ -52,13 +47,9 @@
                         <ion-icon name="{{Playerstate_icon}}"></ion-icon>
                             <ion-label>{{Playerstate_label}}</ion-label>
                     </ion-tab-button>
-                    <!--ion-tab-button tab="Stop" (click)="stop()">
-                        <ion-icon name="square"></ion-icon>
-                            <ion-label>Stop</ion-label>
-                    </ion-tab-button>-->
-                        <ion-tab-button tab="Forward" (click)="forward()" class="tabButtons">
-                            <ion-icon name="skip-forward"></ion-icon>
-                                <ion-label>Forward</ion-label>
+                    <ion-tab-button tab="Forward" (click)="forward()" class="tabButtons">
+                        <ion-icon name="skip-forward"></ion-icon>
+                        <ion-label>Forward</ion-label>
                     </ion-tab-button>
                     <ion-tab-button tab="Repeat" (click)="repeat()" class="tabButtons">
                         <ion-icon name="repeat"></ion-icon>
@@ -68,30 +59,3 @@
             </ion-tabs>
     </ion-content>
 </ion-app>
-        <!--NEUES MENÜ MIT DIVS & CSS - OHNE FEHLERMELDUNGEN
-        ############################################################-->
-       <!--
-<ion-item>
-            <div class="Controls">
-                <div class="Control" (click)="backward()">
-                    <ion-icon name="skip-backward" class="ControlIcon"></ion-icon>
-                    <ion-label class="ControlLabel">Backward</ion-label>
-                </div>
-                <div class="Control" (click)="playpause()">
-                    <ion-icon name="{{Playerstate_label}}" class="ControlIcon"></ion-icon>
-                    <ion-label class="ControlLabel">{{Playerstate}}</ion-label>
-                </div>
-                <div class="Control" (click)="stop()">
-                    <ion-icon name="square" class="ControlIcon"></ion-icon>
-                    <ion-label class="ControlLabel">Stop</ion-label>
-                </div>
-                <div class="Control" (click)="forward()">
-                    <ion-icon name="skip-forward" class="ControlIcon"></ion-icon>
-                    <ion-label class="ControlLabel">Forward</ion-label>
-                </div>
-            </div>
-        </ion-item>
-    <ion-button (click)="storage_test()">storage_test</ion-button>
-</ion-content>
-</ion-app>
-    -->   

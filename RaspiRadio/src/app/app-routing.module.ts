@@ -14,6 +14,8 @@ const routes: Routes = [
   { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
   { path: 'help', loadChildren: './help/help.module#HelpPageModule' },
   { path: 'credits', loadChildren: './credits/credits.module#CreditsPageModule' },
+  { path: 'change-playlist', loadChildren: './editor/playlisteditor/change-playlist/change-playlist.module#ChangePlaylistPageModule' },
+  { path: 'add-playlist', loadChildren: './editor/playlisteditor/add-playlist/add-playlist.module#AddPlaylistPageModule' },
 ];
 
 @NgModule({

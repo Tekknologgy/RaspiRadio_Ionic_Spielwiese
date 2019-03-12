@@ -28,7 +28,6 @@ export class HomePage {
       //Hier werden die Daten im Storage gespeichert
       this.storage.set("ip", this.ip);
       this.storage.set("port", this.port);
-
       await this.delay(2000);   //wird ersetzt durch einen Funktionsaufruf der die Verbindung herstellt
     }
     else this.err_report();
@@ -36,7 +35,6 @@ export class HomePage {
     this.loading.dismiss();
     //if connection ok -> dismiss & nav to login
     //else dismiss & error
-
     //this.loading.dismiss();
   }
 
@@ -50,7 +48,6 @@ export class HomePage {
     });
   }
   
-
   async err_report() {
     const alert = await this.alertCtrl.create({
       header: 'Verbindung Fehlgeschlagen',
