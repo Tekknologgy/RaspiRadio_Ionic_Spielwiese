@@ -1,5 +1,5 @@
-<ion-header >
-    <ion-toolbar class="playerHeader">
+<ion-header>
+    <ion-toolbar >
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
@@ -25,11 +25,10 @@
             </ion-card>
         </ion-item>
         <ion-item>
-            <ion-button slot="end">
+            <ion-button slot="end" (click)="test()">
                 <ion-icon name="{{vol_Icon}}"></ion-icon>
             </ion-button>
             <ion-range min="0" max="100" slot='start' class="volSlider" [(ngModel)]="volSliderValue" (mouseup)="volSliderChanged()" (touchend)="volSliderChanged()"></ion-range>
-            <ion-label slot="start" class="volLabel">{{volSliderValue}}</ion-label>
         </ion-item>
         <ion-item>
             <!--(ionChange)="SliderChanged()" -->
@@ -38,41 +37,6 @@
                 <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
             </ion-range>
         </ion-item>
-            <ion-tabs>
-                <ion-tab-bar slot="Bottom">
-                    <!--In den Tabs wurden die 'tab=""' Teile entfernt, weil das die Tags sind, mit denen das Routing verbunden ist,
-                    welches in diesem Fall nicht vorhanden ist. Für die Funktion wie wir sie verwenden werden sie daher nicht benötigt.
-                    und sind für die Fehlermeldungen verantwortlich die in der COnsole erscheinen-->
-
-                    <!--<ion-tab-button tab="Shuffle" (click)="shuffle()" class="tabButtons">-->
-                    <ion-tab-button (click)="random()" class="tabButtons" [ngStyle]="randomstyle">
-                        <ion-icon name="shuffle"></ion-icon>
-                        <ion-label>Shuffle</ion-label>
-                    </ion-tab-button>
-                    <!--<ion-tab-button tab="Backwards" (click)="backward()" class="tabButtons">-->
-                    <ion-tab-button (click)="backward()" class="tabButtons">
-                        <ion-icon name="skip-backward"></ion-icon>
-                        <ion-label>Backward</ion-label>
-                    </ion-tab-button>    
-                    <!--<ion-tab-button tab="Play" (click)="playpause()" class="tabButtons">-->
-                    <ion-tab-button (click)="playpause()" class="tabButtons">
-                        <ion-icon name="{{Playerstate_icon}}"></ion-icon>
-                        <ion-label>{{Playerstate_label}}</ion-label>
-                    </ion-tab-button>
-                    <!--<ion-tab-button tab="Forward" (click)="forward()" class="tabButtons">-->
-                    <ion-tab-button (click)="forward()" class="tabButtons">
-                        <ion-icon name="skip-forward"></ion-icon>
-                        <ion-label>Forward</ion-label>
-                    </ion-tab-button>
-                    <!--<ion-tab-button tab="Repeat" (click)="repeat()" class="tabButtons">-->
-                    <ion-tab-button (click)="repeat()" class="tabButtons" [ngStyle]="repeatstyle">
-                        <ion-icon name="repeat"></ion-icon>
-                        <ion-label>Repeat</ion-label>
-                    </ion-tab-button>
-                </ion-tab-bar>
-            </ion-tabs>
-    </ion-content>
-</ion-app>
         <!--NEUES MENÜ MIT DIVS & CSS - OHNE FEHLERMELDUNGEN
         ############################################################-->
        <!--
@@ -96,7 +60,30 @@
                 </div>
             </div>
         </ion-item>
-    <ion-button (click)="storage_test()">storage_test</ion-button>
-</ion-content>
+       --> 
+        <!--########################################################-->
+        <ion-item>
+            <ion-tabs >
+                <ion-tab-bar slot="Bottom">
+                    <ion-tab-button tab="Backwards" (click)="backward()">
+                        <ion-icon name="skip-backward"></ion-icon>
+                            <ion-label>Backward</ion-label>
+                    </ion-tab-button>    
+                    <ion-tab-button tab="Play" (click)="playpause()">
+                        <ion-icon name="{{Playerstate_icon}}"></ion-icon>
+                            <ion-label>{{Playerstate_label}}</ion-label>
+                    </ion-tab-button>
+                    <!--ion-tab-button tab="Stop" (click)="stop()">
+                        <ion-icon name="square"></ion-icon>
+                            <ion-label>Stop</ion-label>
+                    </ion-tab-button>-->
+                        <ion-tab-button tab="Forward" (click)="forward()">
+                            <ion-icon name="skip-forward"></ion-icon>
+                                <ion-label>Forward</ion-label>
+                    </ion-tab-button>
+                </ion-tab-bar>
+            </ion-tabs>
+        </ion-item>
+        <!--<ion-button (click)="storage_test()">storage_test</ion-button>-->
+    </ion-content>
 </ion-app>
-    -->   

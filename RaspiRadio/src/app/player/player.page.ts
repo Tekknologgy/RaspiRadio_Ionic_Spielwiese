@@ -15,20 +15,10 @@ import { Storage } from '@ionic/storage';
 })
 export class PlayerPage implements OnInit {
 
-  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; //playervariablen
-  Songduration; currsongtime; currDuration;  //zeiten
-
-  private trackSliderMax;
-  private trackSliderValue;
-  private volSliderValue;
   private mywebsocket;
   private ip;
   private port;
   private RaspiRadio_URL;
-  private randomstatus;
-  private repeatstatus;
-  private randomstyle;
-  private repeatstyle;
   // = "ws://" + this.storage.get("IP") + ":" + this.storage.get("Port")
 
   constructor(
@@ -40,6 +30,11 @@ export class PlayerPage implements OnInit {
     private storage: Storage
   ) {}
 
+  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; volSliderValue;//playervariablen
+  Songduration; currsongtime; currDuration;  //zeiten
+
+  private trackSliderMax;
+  private trackSliderValue;
 
   /*
   //Die Funktion ist mit dem ebenfalls ausgeblendeten Button unterhalb der Tabs verbunden
@@ -66,37 +61,6 @@ export class PlayerPage implements OnInit {
     var data = JSON.stringify({"Action": "setVolume","newVolume": this.volSliderValue});
     this.mywebsocket.next(data);
   }
-
-  async random() {
-    if(this.randomstatus == 0) {
-      this.randomstatus = 1;
-      this.randomstyle = {'color': 'lightgreen'};
-      var data = JSON.stringify({"Action": "Random","State": "1"});
-      this.mywebsocket.next(data);
-    }
-    else {
-      this.randomstatus = 0;
-      this.randomstyle = {'color': 'white'};
-      var data = JSON.stringify({"Action": "Random","State": "0"});
-      this.mywebsocket.next(data);
-    }
-  }
-
-  async repeat() {
-    if(this.repeatstatus == 0) {
-      this.repeatstatus = 1;
-      this.repeatstyle = {'color': 'lightgreen'};
-      var data = JSON.stringify({"Action": "Repeat","State": "1"});
-      this.mywebsocket.next(data);
-    }
-    else {
-      this.repeatstatus = 0;
-      this.repeatstyle = {'color': 'white'};
-      var data = JSON.stringify({"Action": "Repeat","State": "0"});
-      this.mywebsocket.next(data);
-    }
-  }
-  
 
   async backward() { 
     var data = JSON.stringify({"Action": "Previous"});
@@ -136,11 +100,9 @@ export class PlayerPage implements OnInit {
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
-  /*
   async volChanged() {
     
   }
-  */
   async secToTime(onlyseconds): Promise<string> {
 
     let seconds = onlyseconds%60; //Berechnet den reinen Sekunden-Anteil
@@ -199,7 +161,6 @@ export class PlayerPage implements OnInit {
     this.Playerstate = 'Play'; //zum testen für sebi
     this.Playerstate_label = 'Play';
     this.Playerstate_icon = 'play';
-
     this.mywebsocket = this.wsService.connect(this.RaspiRadio_URL);
     this.mywebsocket.subscribe(
       (next) => {
@@ -218,26 +179,6 @@ export class PlayerPage implements OnInit {
           else if(parsed['State'] == 'Paused') {
             this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
           }
-
-          /*
-          //Randomstatus
-          this.randomstatus = parsed['Random'];
-          if(this.randomstatus == 0) {
-            this.randomstyle = {'color': 'white'};
-          }
-          else {
-            this.randomstyle = {'color': 'lightblue'};
-          }
-
-          //Repeatstatus
-          this.repeatstatus = parsed['Repeat'];
-          if(this.repeatstatus == 0) {
-            this.repeatstyle = {'color': 'white'};
-          }
-          else {
-            this.repeatstyle = {'color': 'lightblue'};
-          }
-          */
         }
       }
     )

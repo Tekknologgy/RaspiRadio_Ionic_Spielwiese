@@ -14,11 +14,7 @@ client = MPDClient()
 client.timeout = 3
 client.connect("localhost", 6600)
 client.update
-<<<<<<< HEAD
 
-=======
-"""
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
 async def send_State():
     try:
         #print("try")
@@ -42,11 +38,7 @@ async def send_State():
         client.connect("localhost", 6600)
         client.stop()
         print("Exception")
-<<<<<<< HEAD
 
-=======
-"""
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
 async def hello(websocket, path):
     while True:
         try:
@@ -168,11 +160,7 @@ async def hello(websocket, path):
                     print("Exception")
             ### GetState
             if parsed_json['Action'] == "getState":
-<<<<<<< HEAD
                 """#print("JSON GetState")
-=======
-                #print("JSON GetState")
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
                 try:
                     #print("try")
                     status = {}
@@ -215,13 +203,8 @@ async def hello(websocket, path):
                 except:
                     client.connect("localhost", 6600)
                     client.stop()
-<<<<<<< HEAD
                     print("Exception")"""
                 await send_State()
-=======
-                    print("Exception")
-                """await send_State()"""
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
             ###Random
             if parsed_json['Action'] == "Random":
                 #print("random")
