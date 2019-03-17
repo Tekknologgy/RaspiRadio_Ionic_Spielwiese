@@ -3,7 +3,10 @@
 }
 
 ion-tab-bar {
-    height: 70px;
+    height: 10%;
+    width: 100%;
+ //   background-color: #BC1142;
+    --background: transparent;
 }
 
 .volSlider {
@@ -14,10 +17,22 @@ ion-tab-bar {
     margin-right: -18.2%;
 }
 
+.volLabel{
+    margin-left: -3.7%;
+    font-size: 12px;
+}
 .songSlider{
     width: max;
 }
 
+.playerHeader{
+    background-color: #BC1142;
+}
+.tabButtons{
+ //   background-color: #BC1142;
+    --background: transparent;
+    color: white;
+}
 .playerBackground {
     margin-top:15%;
 }
@@ -26,7 +41,7 @@ ion-tab-bar {
     font-size: 12px;
 }
 
-.Controls {
+.Controls {//für die divs
     margin-left: auto;
     margin-right: auto;
     width: 100%;
@@ -35,19 +50,19 @@ ion-tab-bar {
     justify-content: center;
 }
 
-.Control {
+.Control {//für die divs
     float: left;
     width: 20%;
     text-align: center;
     margin: auto;
 }
 
-.ControlLabel {
+.ControlLabel {//für die divs
     font-size: 12px;
     color: #555555
 }
 
-.ControlIcon {
+.ControlIcon {//für die divs
     font-size: 20px;
     color: #555555
 }
