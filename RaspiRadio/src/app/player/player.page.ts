@@ -67,6 +67,8 @@ export class PlayerPage implements OnInit {
     this.mywebsocket.next(data);
   }
 
+  //Wenn bei repeat oder random ein Paket zum Server verloren geht, kann es zu Problemen kommen
+  //die sich selbst beheben, wenn repeat bzw. random nochmal ausgeführt wird und die Nachricht ankommt.
   async random() {
     if(this.randomstatus == 0) {
       this.randomstatus = 1;
@@ -97,7 +99,6 @@ export class PlayerPage implements OnInit {
     }
   }
   
-
   async backward() { 
     var data = JSON.stringify({"Action": "Previous"});
     this.mywebsocket.next(data);
@@ -119,9 +120,11 @@ export class PlayerPage implements OnInit {
       this.mywebsocket.next(data);
     }
   }
+
   async test() {
     await console.log("test");
   }
+
   async stop() {
     this.Playerstate = "Stop";
     var data = JSON.stringify({"Action": "Stop"});
@@ -219,9 +222,8 @@ export class PlayerPage implements OnInit {
             this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
           }
 
-          /*
           //Randomstatus
-          this.randomstatus = parsed['Random'];
+          this.randomstatus = parsed['RandomState'];
           if(this.randomstatus == 0) {
             this.randomstyle = {'color': 'white'};
           }
@@ -230,14 +232,14 @@ export class PlayerPage implements OnInit {
           }
 
           //Repeatstatus
-          this.repeatstatus = parsed['Repeat'];
+          this.repeatstatus = parsed['RepeatState'];
           if(this.repeatstatus == 0) {
             this.repeatstyle = {'color': 'white'};
           }
           else {
             this.repeatstyle = {'color': 'lightblue'};
           }
-          */
+
         }
       }
     )

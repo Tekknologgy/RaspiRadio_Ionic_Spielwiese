@@ -15,6 +15,7 @@ client.timeout = 3
 client.connect("localhost", 6600)
 client.update
 
+"""
 async def send_State():
     try:
         #print("try")
@@ -34,11 +35,12 @@ async def send_State():
         dumped_json = json.dumps(command)
         await websocket.send(dumped_json)
         #print("JSON GetState send")
-        
+
     except:
         client.connect("localhost", 6600)
         client.stop()
         print("Exception")
+"""
 
 async def hello(websocket, path):
     while True:
@@ -97,7 +99,7 @@ async def hello(websocket, path):
                     client.stop()
                     #print("Exception")
 
-            ###Next
+            ### Next
             if parsed_json['Action'] == "Next":
                 #print("Next")
                 try:
@@ -180,8 +182,8 @@ async def hello(websocket, path):
                     #print("try")
                     status = {}
                     status = client.status()
-                    randomstate = (status['random'])
-                    repeatstate = (status['repeat'])
+                    randomstate = int(status['random'])
+                    repeatstate = int(status['repeat'])
                     #print(status)
                     
                     ################################################################
@@ -212,7 +214,7 @@ async def hello(websocket, path):
                     #print(songinfo_string)
                     songinfo = ast.literal_eval(songinfo_string)
                     #print(songinfo)
-                    command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['time']),"Volume": (status['volume']),"State": "Playing", "Action": "Random","State": (randomstate), "Action": "Repeat","State": (repeatstate)}
+                    command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['time']),"Volume": (status['volume']),"State": "Playing", "RandomState": (randomstate), "RepeatState": (repeatstate)}
                     #print(command)
                     dumped_json = json.dumps(command)
                     await websocket.send(dumped_json)
@@ -225,7 +227,7 @@ async def hello(websocket, path):
                 """await send_State()"""
 
             ###Random State ON
-            if parsed_json['Action'] == "Random" && parsed_json['State'] == 1:
+            if parsed_json['Action'] == "Random" and parsed_json['State'] == 1:
                 #print("random")
                 try:
                     client.random(int(1))
@@ -236,7 +238,7 @@ async def hello(websocket, path):
                     print("Exception")
             
             ###Random State OFF
-            if parsed_json['Action'] == "Random" && parsed_json['State'] == 0:
+            if parsed_json['Action'] == "Random" and parsed_json['State'] == 0:
                 #print("random")
                 try:
                     client.random(int(0))
@@ -247,7 +249,7 @@ async def hello(websocket, path):
                     print("Exception")
             
             ###Repeat State ON
-            if parsed_json['Action'] == "Repeat" && parsed_json['State'] == 1:
+            if parsed_json['Action'] == "Repeat" and parsed_json['State'] == 1:
                 #print("random")
                 try:
                     client.repeat(int(1))
@@ -258,7 +260,7 @@ async def hello(websocket, path):
                     print("Exception")
             
             ###Repeat State OFF
-            if parsed_json['Action'] == "Repeat" && parsed_json['State'] == 0:
+            if parsed_json['Action'] == "Repeat" and parsed_json['State'] == 0:
                 #print("random")
                 try:
                     client.repeat(int(0))
