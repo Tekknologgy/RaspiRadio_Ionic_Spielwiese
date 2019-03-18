@@ -73,13 +73,13 @@ export class PlayerPage implements OnInit {
     if(this.randomstatus == 0) {
       this.randomstatus = 1;
       this.randomstyle = {'color': 'lightgreen'};
-      var data = JSON.stringify({"Action": "Random","State": "1"});
+      var data = JSON.stringify({"Action": "Random","State": 1});
       this.mywebsocket.next(data);
     }
     else {
       this.randomstatus = 0;
       this.randomstyle = {'color': 'white'};
-      var data = JSON.stringify({"Action": "Random","State": "0"});
+      var data = JSON.stringify({"Action": "Random","State": 0});
       this.mywebsocket.next(data);
     }
   }
@@ -88,13 +88,13 @@ export class PlayerPage implements OnInit {
     if(this.repeatstatus == 0) {
       this.repeatstatus = 1;
       this.repeatstyle = {'color': 'lightgreen'};
-      var data = JSON.stringify({"Action": "Repeat","State": "1"});
+      var data = JSON.stringify({"Action": "Repeat","State": 1});
       this.mywebsocket.next(data);
     }
     else {
       this.repeatstatus = 0;
       this.repeatstyle = {'color': 'white'};
-      var data = JSON.stringify({"Action": "Repeat","State": "0"});
+      var data = JSON.stringify({"Action": "Repeat","State": 0});
       this.mywebsocket.next(data);
     }
   }
@@ -228,7 +228,7 @@ export class PlayerPage implements OnInit {
             this.randomstyle = {'color': 'white'};
           }
           else {
-            this.randomstyle = {'color': 'lightblue'};
+            this.randomstyle = {'color': 'lightgreen'};
           }
 
           //Repeatstatus
@@ -237,7 +237,7 @@ export class PlayerPage implements OnInit {
             this.repeatstyle = {'color': 'white'};
           }
           else {
-            this.repeatstyle = {'color': 'lightblue'};
+            this.repeatstyle = {'color': 'lightgreen'};
           }
 
         }
