@@ -219,14 +219,14 @@ export class PlayerPage implements OnInit {
             this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
           }
 
-          /*
+          
           //Randomstatus
           this.randomstatus = parsed['Random'];
           if(this.randomstatus == 0) {
             this.randomstyle = {'color': 'white'};
           }
           else {
-            this.randomstyle = {'color': 'lightblue'};
+            this.randomstyle = {'color': 'lightgreen'};
           }
 
           //Repeatstatus
@@ -235,9 +235,9 @@ export class PlayerPage implements OnInit {
             this.repeatstyle = {'color': 'white'};
           }
           else {
-            this.repeatstyle = {'color': 'lightblue'};
+            this.repeatstyle = {'color': 'lightgreen'};
           }
-          */
+          
         }
       }
     )

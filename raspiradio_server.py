@@ -14,11 +14,7 @@ client = MPDClient()
 client.timeout = 3
 client.connect("localhost", 6600)
 client.update
-<<<<<<< HEAD
 
-=======
-"""
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
 async def send_State():
     try:
         #print("try")
@@ -38,15 +34,12 @@ async def send_State():
         dumped_json = json.dumps(command)
         await websocket.send(dumped_json)
         #print("JSON GetState send")
+        
     except:
         client.connect("localhost", 6600)
         client.stop()
         print("Exception")
-<<<<<<< HEAD
 
-=======
-"""
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
 async def hello(websocket, path):
     while True:
         try:
@@ -69,6 +62,7 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.setvol(parsed_json['newVolume'])
                     #print("Exception")
+
             ### Play
             if parsed_json['Action'] == "Play":
                 #print('JSON play')
@@ -78,6 +72,7 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.play(1)
                     #print("Exception")
+
             ### Pause
             if parsed_json['Action'] == "Pause":
                 #print("JSON pause")
@@ -87,6 +82,7 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.pause(parsed_json['PauseStatus'])
                     #print("Exception")
+
             ### Stop
             if parsed_json['Action'] == "Stop":
                 #print("JSON Stop")
@@ -96,6 +92,7 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.stop()
                     #print("Exception")
+
             ###Next
             if parsed_json['Action'] == "Next":
                 #print("Next")
@@ -123,6 +120,7 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.stop()
                     print("Exception")
+
             ###Previous
             if parsed_json['Action'] == "Previous":
                 #print("Previous")
@@ -150,6 +148,7 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.stop()
                     print("Exception")
+
             ####AddUsers
             if parsed_json['Action'] == "AddUser":
                 #print("JSON Adduser before Try")
@@ -166,13 +165,10 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.stop()
                     print("Exception")
+
             ### GetState
             if parsed_json['Action'] == "getState":
-<<<<<<< HEAD
                 """#print("JSON GetState")
-=======
-                #print("JSON GetState")
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
                 try:
                     #print("try")
                     status = {}
@@ -215,13 +211,8 @@ async def hello(websocket, path):
                 except:
                     client.connect("localhost", 6600)
                     client.stop()
-<<<<<<< HEAD
                     print("Exception")"""
                 await send_State()
-=======
-                    print("Exception")
-                """await send_State()"""
->>>>>>> 56eaea3257395738052415799c8db1a15e17e9ee
             ###Random
             if parsed_json['Action'] == "Random":
                 #print("random")
