@@ -76,7 +76,5 @@
   --ion-color-light-tint: #f5f6f9;
 }
 ion-content{
-  --background: url(/assets/app_background.jpg)!important;
-  --background-repeat: no-repeat;
-  --background-size:100% 100%;
+  --background: url(/assets/app_background.jpg) 0 0/auto 100% no-repeat !important;
 }

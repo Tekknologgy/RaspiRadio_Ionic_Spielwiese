@@ -146,7 +146,7 @@ export class PlayerPage implements OnInit {
   */
   async secToTime(onlyseconds): Promise<string> {
 
-    let seconds = onlyseconds%60; //Berechnet den reinen Sekunden-Anteil
+    let seconds = Math.floor(onlyseconds%60); //Berechnet den reinen Sekunden-Anteil
     let str_seconds = ""; //Speichert die Sekunden als String mit führenden Nullen für die Ausgabe am Ende
     let minutes = Math.floor(onlyseconds/60); //Berechnet den reinen Minuten-Anteil
     let str_minutes = ""; //Speichert die Minuten als String mit führenden Nullen für die Ausgabe am Ende
