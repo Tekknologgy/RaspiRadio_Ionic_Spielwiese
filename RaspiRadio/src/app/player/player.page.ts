@@ -213,6 +213,8 @@ export class PlayerPage implements OnInit {
           this.Interpret = parsed['Artist']; //Setzt den Interpreten
           this.trackSliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
           this.trackSliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
+          this.volSliderValue = parsed['Volume'];
+          console.log(this.volSliderValue);
           //console.log(parsed['Elapsed']);
           this.secToTime(parsed['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
           this.secToTime(parsed['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider

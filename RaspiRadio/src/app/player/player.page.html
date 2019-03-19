@@ -21,16 +21,18 @@
             </ion-card>
         </ion-item>
         <ion-item>
-            <ion-button slot="end">
-                <ion-icon name="{{vol_Icon}}"></ion-icon>
-            </ion-button>
-            <ion-range min="0" max="100" slot='start' class="volSlider" [(ngModel)]="volSliderValue" (mouseup)="volSliderChanged()" (touchend)="volSliderChanged()"></ion-range>
-            <ion-label slot="start" class="volLabel">{{volSliderValue}}</ion-label>
+            <ion-badge slot="start" class="volLabel" color="primary">{{volSliderValue}}</ion-badge>
+            <ion-range min="0" max="100" color="primary" slot='start' class="volSlider" [(ngModel)]="volSliderValue" (mouseup)="volSliderChanged()" (touchend)="volSliderChanged()"></ion-range>
+            <!--<ion-button slot="end">-->
+            <ion-icon name="{{vol_Icon}}" slot="end"></ion-icon>
+            <!--</ion-button>-->
         </ion-item>
         <ion-item>
             <ion-range min="0" max={{trackSliderMax}} color="tertiary" class="songSlider" [(ngModel)]="trackSliderValue" (mouseup)="trackSliderChanged()" (touchend)="trackSliderChanged()">
-                <ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>
-                <ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>
+                <!--<ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>-->
+                <ion-badge slot="start" class="ElapsedBadge" color="tertiary">{{currDuration}}</ion-badge>
+                <!--<ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>-->
+                <ion-badge slot="end" class="DurationBadge" color="tertiary">{{Songduration}}</ion-badge>
             </ion-range>
         </ion-item>
             <ion-tabs>
@@ -41,8 +43,8 @@
 
                     <!--<ion-tab-button tab="Shuffle" (click)="shuffle()" class="tabButtons">-->
                     <ion-tab-button (click)="random()" class="tabButtons" [ngStyle]="randomstyle">
-                        <ion-icon name="shuffle"></ion-icon>
-                        <ion-label>Shuffle</ion-label>
+                        <ion-icon name="shuffle" [ngStyle]="randomstyle"></ion-icon>
+                        <ion-label [ngStyle]="randomstyle">Shuffle</ion-label>
                     </ion-tab-button>
                     <!--<ion-tab-button tab="Backwards" (click)="backward()" class="tabButtons">-->
                     <ion-tab-button (click)="backward()" class="tabButtons">
@@ -61,8 +63,8 @@
                     </ion-tab-button>
                     <!--<ion-tab-button tab="Repeat" (click)="repeat()" class="tabButtons">-->
                     <ion-tab-button (click)="repeat()" class="tabButtons" [ngStyle]="repeatstyle">
-                        <ion-icon name="repeat"></ion-icon>
-                        <ion-label>Repeat</ion-label>
+                        <ion-icon name="repeat" [ngStyle]="repeatstyle"></ion-icon>
+                        <ion-label [ngStyle]="repeatstyle">Repeat</ion-label>
                     </ion-tab-button>
                 </ion-tab-bar>
             </ion-tabs>
