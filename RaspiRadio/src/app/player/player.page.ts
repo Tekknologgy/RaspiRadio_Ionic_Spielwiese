@@ -15,10 +15,20 @@ import { Storage } from '@ionic/storage';
 })
 export class PlayerPage implements OnInit {
 
+  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; //playervariablen
+  Songduration; currsongtime; currDuration;  //zeiten
+
+  private trackSliderMax;
+  private trackSliderValue;
+  private volSliderValue;
   private mywebsocket;
   private ip;
   private port;
   private RaspiRadio_URL;
+  private randomstatus;
+  private repeatstatus;
+  private randomstyle;
+  private repeatstyle;
   // = "ws://" + this.storage.get("IP") + ":" + this.storage.get("Port")
 
   constructor(
@@ -30,11 +40,6 @@ export class PlayerPage implements OnInit {
     private storage: Storage
   ) {}
 
-  loading; Songname; Playerstate; Interpret; Playerstate_label; Playerstate_icon; vol_Icon; volSliderValue;//playervariablen
-  Songduration; currsongtime; currDuration;  //zeiten
-
-  private trackSliderMax;
-  private trackSliderValue;
 
   /*
   //Die Funktion ist mit dem ebenfalls ausgeblendeten Button unterhalb der Tabs verbunden
@@ -62,6 +67,38 @@ export class PlayerPage implements OnInit {
     this.mywebsocket.next(data);
   }
 
+  //Wenn bei repeat oder random ein Paket zum Server verloren geht, kann es zu Problemen kommen
+  //die sich selbst beheben, wenn repeat bzw. random nochmal ausgeführt wird und die Nachricht ankommt.
+  async random() {
+    if(this.randomstatus == 0) {
+      this.randomstatus = 1;
+      this.randomstyle = {'color': 'lightgreen'};
+      var data = JSON.stringify({"Action": "Random","State": 1});
+      this.mywebsocket.next(data);
+    }
+    else {
+      this.randomstatus = 0;
+      this.randomstyle = {'color': 'white'};
+      var data = JSON.stringify({"Action": "Random","State": 0});
+      this.mywebsocket.next(data);
+    }
+  }
+
+  async repeat() {
+    if(this.repeatstatus == 0) {
+      this.repeatstatus = 1;
+      this.repeatstyle = {'color': 'lightgreen'};
+      var data = JSON.stringify({"Action": "Repeat","State": 1});
+      this.mywebsocket.next(data);
+    }
+    else {
+      this.repeatstatus = 0;
+      this.repeatstyle = {'color': 'white'};
+      var data = JSON.stringify({"Action": "Repeat","State": 0});
+      this.mywebsocket.next(data);
+    }
+  }
+  
   async backward() { 
     var data = JSON.stringify({"Action": "Previous"});
     this.mywebsocket.next(data);
@@ -83,9 +120,11 @@ export class PlayerPage implements OnInit {
       this.mywebsocket.next(data);
     }
   }
+
   async test() {
     await console.log("test");
   }
+
   async stop() {
     this.Playerstate = "Stop";
     var data = JSON.stringify({"Action": "Stop"});
@@ -100,12 +139,14 @@ export class PlayerPage implements OnInit {
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
+  /*
   async volChanged() {
     
   }
+  */
   async secToTime(onlyseconds): Promise<string> {
 
-    let seconds = onlyseconds%60; //Berechnet den reinen Sekunden-Anteil
+    let seconds = Math.floor(onlyseconds%60); //Berechnet den reinen Sekunden-Anteil
     let str_seconds = ""; //Speichert die Sekunden als String mit führenden Nullen für die Ausgabe am Ende
     let minutes = Math.floor(onlyseconds/60); //Berechnet den reinen Minuten-Anteil
     let str_minutes = ""; //Speichert die Minuten als String mit führenden Nullen für die Ausgabe am Ende
@@ -172,14 +213,34 @@ export class PlayerPage implements OnInit {
           this.Interpret = parsed['Artist']; //Setzt den Interpreten
           this.trackSliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
           this.trackSliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
+          //console.log(parsed['Elapsed']);
           this.secToTime(parsed['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
           this.secToTime(parsed['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
           if(parsed['State'] == 'Playing') {
-            this.Playerstate = "Pause"; //etwas verwirrend, weil mit Playerstate "Pause" gemeint ist, dass das Pause-Symbol angezeigt werden soll und der Player gerade spielt
+            this.Playerstate = "Pause";
           }
           else if(parsed['State'] == 'Paused') {
-            this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
+            this.Playerstate = "Play";
           }
+
+          //Randomstatus
+          this.randomstatus = parsed['RandomState'];
+          if(this.randomstatus == 0) {
+            this.randomstyle = {'color': 'white'};
+          }
+          else {
+            this.randomstyle = {'color': 'lightgreen'};
+          }
+
+          //Repeatstatus
+          this.repeatstatus = parsed['RepeatState'];
+          if(this.repeatstatus == 0) {
+            this.repeatstyle = {'color': 'white'};
+          }
+          else {
+            this.repeatstyle = {'color': 'lightgreen'};
+          }
+
         }
       }
     )
