@@ -213,13 +213,14 @@ export class PlayerPage implements OnInit {
           this.Interpret = parsed['Artist']; //Setzt den Interpreten
           this.trackSliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
           this.trackSliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
+          //console.log(parsed['Elapsed']);
           this.secToTime(parsed['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
           this.secToTime(parsed['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
           if(parsed['State'] == 'Playing') {
-            this.Playerstate = "Pause"; //etwas verwirrend, weil mit Playerstate "Pause" gemeint ist, dass das Pause-Symbol angezeigt werden soll und der Player gerade spielt
+            this.Playerstate = "Pause";
           }
           else if(parsed['State'] == 'Paused') {
-            this.Playerstate = "Play"; //etwas verwirrend, weil mit Playerstate "Play" gemeint ist, dass das Play-Symbol angezeigt werden soll und der Player gerade pausiert
+            this.Playerstate = "Play";
           }
 
           //Randomstatus
