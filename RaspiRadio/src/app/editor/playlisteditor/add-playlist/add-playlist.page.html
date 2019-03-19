@@ -5,7 +5,14 @@
       </ion-buttons>
           <ion-title>Add Playlist</ion-title>
     </ion-toolbar>
-  </ion-header>
-<ion-content padding>
+</ion-header>
 
+<ion-content padding>
+  <ion-input type="text" placeholder="Name of the Playlist" [(ngModel)]="playlistName" id="playlistName" class="input"></ion-input>
+  <ion-list *ngFor="let p of playListSong">
+    <ion-item>
+      <ion-label>{{p.title}},{{p.interpret}}</ion-label>
+      <ion-checkbox checked="false" slot="end"></ion-checkbox>
+    </ion-item>
+  </ion-list>
 </ion-content>
