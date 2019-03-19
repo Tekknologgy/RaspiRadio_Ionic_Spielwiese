@@ -231,7 +231,7 @@ async def hello(websocket, path):
                     #print(songinfo_string)
                     songinfo = ast.literal_eval(songinfo_string)
                     #print(songinfo)
-                    command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['time']),"Volume": (status['volume']),"State": "Playing", "RandomState": (randomstate), "RepeatState": (repeatstate)}
+                    command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['elapsed']),"Volume": (status['volume']),"State": "Playing", "RandomState": (randomstate), "RepeatState": (repeatstate)}
                     #print(command)
                     dumped_json = json.dumps(command)
                     await websocket.send(dumped_json)
