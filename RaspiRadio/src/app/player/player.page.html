@@ -23,15 +23,11 @@
         <ion-item>
             <ion-badge slot="start" class="volLabel" color="primary">{{volSliderValue}}</ion-badge>
             <ion-range min="0" max="100" color="primary" slot='start' class="volSlider" [(ngModel)]="volSliderValue" (mouseup)="volSliderChanged()" (touchend)="volSliderChanged()"></ion-range>
-            <!--<ion-button slot="end">-->
             <ion-icon name="{{vol_Icon}}" slot="end"></ion-icon>
-            <!--</ion-button>-->
         </ion-item>
         <ion-item>
             <ion-range min="0" max={{trackSliderMax}} color="tertiary" class="songSlider" [(ngModel)]="trackSliderValue" (mouseup)="trackSliderChanged()" (touchend)="trackSliderChanged()">
-                <!--<ion-label slot="start" class="playerLabel">{{currDuration}}</ion-label>-->
                 <ion-badge slot="start" class="ElapsedBadge" color="tertiary">{{currDuration}}</ion-badge>
-                <!--<ion-label slot="end" class="playerLabel">{{Songduration}}</ion-label>-->
                 <ion-badge slot="end" class="DurationBadge" color="tertiary">{{Songduration}}</ion-badge>
             </ion-range>
         </ion-item>

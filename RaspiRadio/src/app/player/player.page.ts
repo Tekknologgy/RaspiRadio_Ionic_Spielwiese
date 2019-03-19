@@ -29,7 +29,6 @@ export class PlayerPage implements OnInit {
   private repeatstatus;
   private randomstyle;
   private repeatstyle;
-  // = "ws://" + this.storage.get("IP") + ":" + this.storage.get("Port")
 
   constructor(
     public alertCtrl: AlertController,
@@ -139,11 +138,7 @@ export class PlayerPage implements OnInit {
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
-  /*
-  async volChanged() {
-    
-  }
-  */
+
   async secToTime(onlyseconds): Promise<string> {
 
     let seconds = Math.floor(onlyseconds%60); //Berechnet den reinen Sekunden-Anteil
@@ -213,9 +208,7 @@ export class PlayerPage implements OnInit {
           this.Interpret = parsed['Artist']; //Setzt den Interpreten
           this.trackSliderMax = parsed['Duration']; //setzt den Maximalwert des Sliders in Sekunden
           this.trackSliderValue = parsed['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
-          this.volSliderValue = parsed['Volume'];
-          console.log(this.volSliderValue);
-          //console.log(parsed['Elapsed']);
+          this.volSliderValue = parsed['Volume']; //Setzt die Lautstärke
           this.secToTime(parsed['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
           this.secToTime(parsed['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
           if(parsed['State'] == 'Playing') {
@@ -251,6 +244,5 @@ export class PlayerPage implements OnInit {
     await this.delay(500);
     var data = JSON.stringify({"Action": "getState"});
     this.mywebsocket.next(data);
-    //console.log("Jetzt");
   }
 }
