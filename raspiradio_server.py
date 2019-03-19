@@ -371,6 +371,20 @@ async def hello(websocket, path):
                     client.stop()
                     print("Exception")
 
+            #### OK Connection-Dialog sending
+            if parsed_json['Action'] == "ConnTest":
+                #print("setElapsed")
+                try:
+                    #print("try")
+                    command = {"Action": "ConnTest","Response": "OK"}
+                    dumped_json = json.dumps(command)
+                    await websocket.send(dumped_json)
+                    
+                except:
+                    client.connect("localhost", 6600)
+                    client.stop()
+                    print("Exception")
+
         except:
             #print("Exception")
             pass
