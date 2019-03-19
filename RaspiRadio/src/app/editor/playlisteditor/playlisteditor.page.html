@@ -9,9 +9,8 @@
 
 <ion-content>
   <ion-list *ngFor="let p of playList">
-      <ion-item>
-        <ion-label>{{p.title}}</ion-label>
-        <ion-button (click)="optionPlaylist()">Test</ion-button>
+      <ion-item (click)="optionPlaylist()">
+        <ion-label>{{p.title}},{{p.id}}</ion-label>
       </ion-item>
   </ion-list>
 </ion-content>

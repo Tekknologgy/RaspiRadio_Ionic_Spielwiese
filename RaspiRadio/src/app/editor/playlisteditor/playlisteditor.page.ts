@@ -8,9 +8,9 @@ import { ActionSheetController,NavController } from '@ionic/angular';
 })
 export class PlaylisteditorPage implements OnInit {
   public playList=[
-    {title:'playlist1'},
-    {title:'playlist2'},
-    {title:'playlist3'}
+    {title:'playlist1',id:'1'},
+    {title:'playlist2',id:'2'},
+    {title:'playlist3',id:'3'}
   ]
   constructor(public actionCtrl: ActionSheetController, public navCtrl: NavController) { }
   async optionPlaylist() {

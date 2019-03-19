@@ -37,31 +37,22 @@
         </ion-item>
             <ion-tabs>
                 <ion-tab-bar slot="Bottom">
-                    <!--In den Tabs wurden die 'tab=""' Teile entfernt, weil das die Tags sind, mit denen das Routing verbunden ist,
-                    welches in diesem Fall nicht vorhanden ist. Für die Funktion wie wir sie verwenden werden sie daher nicht benötigt.
-                    und sind für die Fehlermeldungen verantwortlich die in der COnsole erscheinen-->
-
-                    <!--<ion-tab-button tab="Shuffle" (click)="shuffle()" class="tabButtons">-->
                     <ion-tab-button (click)="random()" class="tabButtons" [ngStyle]="randomstyle">
                         <ion-icon name="shuffle" [ngStyle]="randomstyle"></ion-icon>
                         <ion-label [ngStyle]="randomstyle">Shuffle</ion-label>
                     </ion-tab-button>
-                    <!--<ion-tab-button tab="Backwards" (click)="backward()" class="tabButtons">-->
                     <ion-tab-button (click)="backward()" class="tabButtons">
                         <ion-icon name="skip-backward"></ion-icon>
                         <ion-label>Backward</ion-label>
                     </ion-tab-button>    
-                    <!--<ion-tab-button tab="Play" (click)="playpause()" class="tabButtons">-->
                     <ion-tab-button (click)="playpause()" class="tabButtons">
                         <ion-icon name="{{Playerstate_icon}}"></ion-icon>
                         <ion-label>{{Playerstate_label}}</ion-label>
                     </ion-tab-button>
-                    <!--<ion-tab-button tab="Forward" (click)="forward()" class="tabButtons">-->
                     <ion-tab-button (click)="forward()" class="tabButtons">
                         <ion-icon name="skip-forward"></ion-icon>
                         <ion-label>Forward</ion-label>
                     </ion-tab-button>
-                    <!--<ion-tab-button tab="Repeat" (click)="repeat()" class="tabButtons">-->
                     <ion-tab-button (click)="repeat()" class="tabButtons" [ngStyle]="repeatstyle">
                         <ion-icon name="repeat" [ngStyle]="repeatstyle"></ion-icon>
                         <ion-label [ngStyle]="repeatstyle">Repeat</ion-label>
