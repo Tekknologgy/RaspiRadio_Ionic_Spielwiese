@@ -62,6 +62,15 @@ export class PlayerPage implements OnInit {
   }
 
   async volSliderChanged() {
+    if(this.volSliderValue < 33) {
+      this.vol_Icon = "volume-mute";
+    }
+    else if(this.volSliderValue <= 66 && this.volSliderValue >= 33) {
+      this.vol_Icon = "volume-low";
+    }
+    else {
+      this.vol_Icon = "volume-high";
+    }
     var data = JSON.stringify({"Action": "setVolume","newVolume": this.volSliderValue});
     this.mywebsocket.next(data);
   }
