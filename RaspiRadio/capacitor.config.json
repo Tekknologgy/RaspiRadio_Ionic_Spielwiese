@@ -1,0 +1,6 @@
+{
+  "appId": "com.Raspi.Radio",
+  "appName": "RaspiRadio",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}
