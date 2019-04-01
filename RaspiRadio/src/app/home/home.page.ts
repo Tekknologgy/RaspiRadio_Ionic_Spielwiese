@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { WebsocketService } from '../services/websocket.service';
+import { WSSubscriberService } from "../services/wssubscriber-service.service";
 import { Router } from '@angular/router';
 
 @Component({
@@ -17,15 +18,16 @@ export class HomePage {
   port;
   loading;
   error = false;
-  private mywebsocket;
-  private connected = false;
+  ipPresent = false;
+  portPresent = false;
+  connectionSuccess = false;
   
   constructor(
     public alertCtrl: AlertController,
     public loadingCtrl: LoadingController,
     public navCtrl : NavController,
     private storage: Storage,
-    private wsService: WebsocketService,
+    private wsService: WSSubscriberService,
     private router: Router
   ) {}
 
@@ -45,11 +47,24 @@ export class HomePage {
   //Zum Unterscheiden wird der Funktion ein String übergeben. Der enthält entweder "OnInit" oder "Button".
   //Innerhalb der Funktion werden dann großteils die selben Dinge getan. Dort, wo jedoch unterschiedliche Dinge zu tun sind
   //differenziere ich zwischen "OnInit" und "Button".
+
+  public OnMessage(message) {
+    if((message["Action"] == "ConnTest") && (message["Response"] == "OK")) {
+      console.log("Hat gefunzt");
+      this.storage.set("ip", this.ip);
+      this.storage.set("port", this.port);
+      this.loading.dismiss();
+      this.router.navigate(['/player']);
+    }
+  }
   
   async conn_rasp(origin: string) {
     if (origin == "Button") { //Wenn der Button die Funktion aufgerufen hat
       if((this.ip > "") && (this.port > 0)) {   //Wenn in den Feldern etwas steht, zeige Lade-Bildschirm
-        this.show_loading();  
+        this.ipPresent = true;
+        this.portPresent = true;
+        this.show_loading();
+        console.log("Show loading");
       }
       else {  //Sonst zeige einen Fehler und steige aus der kompletten conn_rasp() Funktion aus
         this.err_report();
@@ -61,58 +76,64 @@ export class HomePage {
       await this.storage.get('ip').then((val) => {  //Rufe IP aus dem Storage ab
         if (val) {  //Wenn IP vorhanden
           this.ip = val;  //ins Feld schreiben und in der lokalen Variable "ip" speichern
+          this.ipPresent = true;
         }
         else {  //Wenn keine IP vorhanden
-          return; //Aus conn_rasp() aussteigen
+          this.ipPresent = false;
         }
       });
       await this.storage.get('port').then((val) => {  //Rufe Port aus dem Storage ab
         if (val) {  //Wenn Port vorhanden
           this.port = val;  //ins Feld schreiben und in der lokalen Variable "port" speichern
+          this.portPresent = true;
         }
         else {  //Wenn kein Port vorhanden
-          return; //Aus conn_rasp() aussteigen
+          this.portPresent = false;
         }
       });
     }
-
-    //Gilt für "OnInit" genauso wie für "Button"
-    this.mywebsocket = this.wsService.connect("ws://" + this.ip + ":" + this.port); //Connect
-    this.mywebsocket.subscribe( //Subscribe to incoming Messages (wird erst durchlaufen, wenn eine Nachricht eingeht)
-      (next) => {
-        let parsed = JSON.parse(next.data);
-        if((parsed['Action'] == 'ConnTest') && (parsed['Response'] == 'OK')) {  //Wenn vom Server ein OK zurückgekommen ist
-          this.connected = true;  //Setze "connected" auf True (Eine Subscription ist eine asynchrone Funktion - deshalb eine bool zur Hilfe)
-        }
-      }
-    )
-    await this.delay(500);  //Delay, damit der Raspi Zeit hat die Verbindung aufzubauen
-    var data = JSON.stringify({"Action": "ConnTest"});
-    this.mywebsocket.next(data);  //Start des Verbindungs-Tests
-    await this.delay(2000); //Timeout für das Warten auf die Antwort
-    if (this.connected == true) { //Wenn in der Zwischenzeit durch das Subscribe bei einer eingehenden Nachricht "connected" auf True gesetzt wurde
-      this.loading.dismiss(); //Entfernen des Lade-Bildschirms
-      
-      //Wenn die Verbindung durch den Button aufgebaut wurde, speichere die Daten aus den Feldern im Storage und leite an den Player weiter
-      if (origin == "Button") {
-        this.storage.set("ip", this.ip);
-        this.storage.set("port", this.port);
-        this.router.navigate(['/player']);
-      }
-      //Wenn die Verbindung durch Daten aus dem Storage bei "OnInit" aufgebaut wurde leite sofort zum Player weiter
-      if (origin == "OnInit") {
-        this.router.navigate(['/player']);
-      }
+    
+    if(this.ipPresent == false && this.portPresent == false) {
+      this.loading.dismiss();
+      return;
     }
-    else this.err_report(); //Wenn nach 2000ms Verbindungstimeout die lokale Variable "connected" immer noch auf False steht, wird eine Fehlermeldung angezeigt.
+
+    this.wsService.subscribe("ws://" + this.ip + ":" + this.port);
+    
+    var data = {"Action": "ConnTest"};
+    this.wsService.send(data);
+
+    // //Gilt für "OnInit" genauso wie für "Button"
+    // this.wsService.connect("ws://" + this.ip + ":" + this.port); //Connect
+    
+    // console.log("Subscribing...");
+    // HomePage.Subscription = this.wsService.socket$.subscribe(
+    //   (next) => {
+    //     if((next["Action"] == "ConnTest") && (next["Response"] == "OK")) {
+    //       console.log("Hat gefunzt");
+    //       this.storage.set("ip", this.ip);
+    //       this.storage.set("port", this.port);
+    //       this.loading.dismiss();
+    //       HomePage.Subscription.unsubscribe();
+    //       this.router.navigate(['/player']);
+    //     }
+    //   },
+    //   (error) => console.log("Error: " + error),
+    //   (complete) => console.log("Complete" + complete)
+    // );
+    
+    // //var data = {"Plugin": "LinkSharingSystem"};
+    // console.log("Sending...");
+    // var data = {"Action": "ConnTest"};
+    // this.wsService.socket$.next(data);  //Start des Verbindungs-Tests
   }
 
   //Ist mit dem Button "Weiter zu Testzwecken" verbunden, welcher auskommentiert ist
-  /*
+
   async weiter_test() {
     this.router.navigate(['/player']);
   }
-  */
+
 
   //Ist verbunden mit dem storage_test Button
   /*
@@ -152,6 +173,9 @@ export class HomePage {
 
   async ngOnInit() {
 
+    // this.storage.remove("ip");
+    // this.storage.remove("port");
+    this.wsService.register(this);
     this.conn_rasp("OnInit"); //Ruft die Funktion conn_rasp() im Kontext "InInit" auf
 
   }
