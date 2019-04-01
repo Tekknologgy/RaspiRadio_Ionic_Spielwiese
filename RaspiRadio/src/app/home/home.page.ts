@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, NavController, LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { WebsocketService } from '../services/websocket.service';
 import { WSSubscriberService } from "../services/wssubscriber-service.service";
 import { Router } from '@angular/router';
 
@@ -31,29 +30,40 @@ export class HomePage {
     private router: Router
   ) {}
 
-  //Wenn IP & Port im Storage vorhanden sind, soll die Verbindung geprüft werden.
-  //Währenddessen soll ein Lade-Bildschirm angezeigt werden. Das Timeout beträgt 2000ms.
-  //Wenn die Verbindung funktioniert, soll der Lade-Bildschirm verschwinden und sofort zum Player weitergeleitet werden.
-  //Wenn die Verbindung nicht funktioniert, soll eine Fehlermeldung erscheinen, die Daten aus dem Storage in den Feldern stehen
-  //und ein Connect über den Button ermöglicht werden.
+  //Zu Beginn wird ein Ladebildschirm angezeigt
 
-  //Wenn der Connect-Dialog angezeigt wird (keine oder falsche Daten im Storage) soll nach dem Klick auf den Connect-Button
-  //die Eingabe mit einem Verbindungstest überprüft werden, während ein Lade-Bildschirm mit 2000ms Timeout angezeigt wird.
-  //Schlägt der Test fehl, soll eine Fehlermeldung erscheinen und die Eingabe korrigiert werden können.
-  //Funktioniert der Verbindungstest,soll der Lade-Bildschirm verschwinden, die Daten werden im Storage gespeichert
-  //und es wird sofort zum Player weitergeleitet.
+  //Wenn IP & Port im Storage vorhanden sind, soll eine Nachricht an den Server geschickt werden.
+  //Wenn dieser mit einem OK antwortet, soll der Lade-Bildschirm verschwinden und sofort zum Player weitergeleitet werden.
+  
+  //Sind keine Daten im Storage, soll ein Connect über den Button ermöglicht werden. Dann sollen die Eingabefelder leer sein.
+  //Sind gespeicherte Daten vorhanden aber inkorrekt, dann soll eine Fehlermeldung angezeigt werden.
+  //Die Eingabefelder enthalten dann die gespeicherten inkorrekten Daten.
 
-  //Da beide Aufgaben sehr ähnlich sind, habe ich EINE Funktion geschrieben, die beides macht.
-  //Zum Unterscheiden wird der Funktion ein String übergeben. Der enthält entweder "OnInit" oder "Button".
-  //Innerhalb der Funktion werden dann großteils die selben Dinge getan. Dort, wo jedoch unterschiedliche Dinge zu tun sind
-  //differenziere ich zwischen "OnInit" und "Button".
+  //Sind die Daten in den Eingabefeldern inkorrekt und es wird "Connect" geklickt, dann soll eine Fehlermeldung erscheinen
+  //und eine erneute Eingabe möglich sein.
+
+  //Nachdem die Anzeige aufgebaut wurde, wird zuerst die "Loading..." Animation gestartet und dann
+  //darauf gewartet dass das Storage bereit ist.
+  //Bevor die Funktion "conn_rasp" aufgerufen wird, werden noch eingehende Nachrichten am WebsocketService abonniert.
+  //Im conn_rasp wird dann unterschieden, ob die Funktion aus dem Init oder vom Button aufgerufen wurde.
+
+  //Die Funktion OnMessage ist die CallBack-Funktion die ausgeführt wird, sobald eine neue Nachricht am Websocket eingeht.
+  //Wenn eine Antwort vom Server eingeht, wird ein eventuell vorhandenes "Loading..." entfernt, die korrekten Daten im Storage
+  //gespeichert und dann zum Player weitergeleitet. Die Funktion OnMessage ist Public, damit man auf sie auch zugreifen kann,
+  //wenn man in einer anderen Page ist. Da Problem ist dass jede Page, die eingehende Nachrichten abonniert hat, neue Nachrichten
+  //erhält, auch wenn die Seite gerade nicht angezeigt wird. Ist man gerade am debuggen und lässt sich eingehende NAchrichten anzeigen
+  //erscheint jede eingehende Nachricht ein mal für jede Page die abonniert hat. Wenn allerdings der letzte Abonnent sein Abo kündigt,
+  //wird auch die Verbindung getrennt. Also muss man beim Seiten wechseln, zuerst die neue Seite abonnieren und dann von allen anderen
+  //Pages das Abo lösen.
 
   public OnMessage(message) {
     if((message["Action"] == "ConnTest") && (message["Response"] == "OK")) {
-      console.log("Hat gefunzt");
+      console.log(`Incoming: ${JSON.stringify(message)}`);
       this.storage.set("ip", this.ip);
       this.storage.set("port", this.port);
-      this.loading.dismiss();
+      if(this.loading.present()) {
+        this.loading.dismiss();
+      }
       this.router.navigate(['/player']);
     }
   }
@@ -63,7 +73,7 @@ export class HomePage {
       if((this.ip > "") && (this.port > 0)) {   //Wenn in den Feldern etwas steht, zeige Lade-Bildschirm
         this.ipPresent = true;
         this.portPresent = true;
-        this.show_loading();
+        //await this.show_loading("Button");
         console.log("Show loading");
       }
       else {  //Sonst zeige einen Fehler und steige aus der kompletten conn_rasp() Funktion aus
@@ -72,9 +82,8 @@ export class HomePage {
       }
     }
     if (origin == "OnInit") { //Wenn die Funktion aus dem OnInit aufgerufen wurde
-      this.show_loading();  //zeige den Lade-Bildschirm
       await this.storage.get('ip').then((val) => {  //Rufe IP aus dem Storage ab
-        if (val) {  //Wenn IP vorhanden
+        if (val > "") {  //Wenn IP vorhanden
           this.ip = val;  //ins Feld schreiben und in der lokalen Variable "ip" speichern
           this.ipPresent = true;
         }
@@ -83,7 +92,7 @@ export class HomePage {
         }
       });
       await this.storage.get('port').then((val) => {  //Rufe Port aus dem Storage ab
-        if (val) {  //Wenn Port vorhanden
+        if (val > "") {  //Wenn Port vorhanden
           this.port = val;  //ins Feld schreiben und in der lokalen Variable "port" speichern
           this.portPresent = true;
         }
@@ -94,7 +103,9 @@ export class HomePage {
     }
     
     if(this.ipPresent == false && this.portPresent == false) {
-      this.loading.dismiss();
+      if(this.loading.present()) {
+        this.loading.dismiss();
+      }
       return;
     }
 
@@ -102,30 +113,6 @@ export class HomePage {
     
     var data = {"Action": "ConnTest"};
     this.wsService.send(data);
-
-    // //Gilt für "OnInit" genauso wie für "Button"
-    // this.wsService.connect("ws://" + this.ip + ":" + this.port); //Connect
-    
-    // console.log("Subscribing...");
-    // HomePage.Subscription = this.wsService.socket$.subscribe(
-    //   (next) => {
-    //     if((next["Action"] == "ConnTest") && (next["Response"] == "OK")) {
-    //       console.log("Hat gefunzt");
-    //       this.storage.set("ip", this.ip);
-    //       this.storage.set("port", this.port);
-    //       this.loading.dismiss();
-    //       HomePage.Subscription.unsubscribe();
-    //       this.router.navigate(['/player']);
-    //     }
-    //   },
-    //   (error) => console.log("Error: " + error),
-    //   (complete) => console.log("Complete" + complete)
-    // );
-    
-    // //var data = {"Plugin": "LinkSharingSystem"};
-    // console.log("Sending...");
-    // var data = {"Action": "ConnTest"};
-    // this.wsService.socket$.next(data);  //Start des Verbindungs-Tests
   }
 
   //Ist mit dem Button "Weiter zu Testzwecken" verbunden, welcher auskommentiert ist
@@ -160,9 +147,9 @@ export class HomePage {
     return await alert.present();
   }
 
-  async show_loading() {
+  async show_loading(text: string) {
     this.loading = await this.loadingCtrl.create({
-      message:'Connecting...',
+      message: text,
     });
     return await this.loading.present();
   }
@@ -171,13 +158,17 @@ export class HomePage {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  async ngOnInit() {
-
+  async ngAfterViewInit() {
+    await this.storage.ready;
+    
+    //Dient nur zum Testen des Local Storage
+    //Wird es einkommentiert, dann wird bei Programmstart das Storage gelöscht.
     // this.storage.remove("ip");
     // this.storage.remove("port");
+    // this.storage.clear;
+    
+    await this.show_loading("Loading...");  //zeige den Lade-Bildschirm
     this.wsService.register(this);
     this.conn_rasp("OnInit"); //Ruft die Funktion conn_rasp() im Kontext "InInit" auf
-
   }
-
 }

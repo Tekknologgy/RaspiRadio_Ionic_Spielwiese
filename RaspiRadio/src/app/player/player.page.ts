@@ -228,7 +228,7 @@ export class PlayerPage implements OnInit {
   }
 
   async ngOnInit() {
-    
+    console.log("Player Loading...")
     /*
     //Das Storage braucht ein await, weil er sich sonst schon verbindet bevor er die URL hat.
     //Das GET ist eine async Funktion und returned ein Promise, weswegen man den Wert erst aus den Promise lösen muss.
