@@ -54,10 +54,14 @@ export class PlayerPage implements OnInit {
       this.secToTime(next['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
       this.secToTime(next['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
       if(next['State'] == 'Playing') {
-        this.Playerstate = "Pause";
+        this.Playerstate = 'Pause';
+        this.Playerstate_label = 'Pause';
+        this.Playerstate_icon = 'pause';
       }
       else if(next['State'] == 'Paused') {
-        this.Playerstate = "Play";
+        this.Playerstate = 'Play';
+        this.Playerstate_label = 'Play';
+        this.Playerstate_icon = 'play';
       }
       //Randomstatus
       this.randomstatus = next['RandomState'];
