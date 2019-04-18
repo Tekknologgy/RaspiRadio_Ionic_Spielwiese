@@ -51,7 +51,7 @@ export class PlayerPage implements OnInit {
       this.trackSliderMax = next['Duration']; //setzt den Maximalwert des Sliders in Sekunden
       this.trackSliderValue = next['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
       this.volSliderValue = next['Volume']; //Setzt die Lautstärke
-      this.secToTime(next['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
+      this.secToTime(next['Duration']).then((result) => this.Songduration = result); //setzt die Anzeige der Titeldauer rechts neben dem Slider
       this.secToTime(next['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
       if(next['State'] == 'play') {
         this.Playerstate = 'Pause';
@@ -79,6 +79,10 @@ export class PlayerPage implements OnInit {
       else {
         this.repeatstyle = {'color': 'lightgreen'};
       }
+    }
+    if(next['Action'] == 'newElapsed') {
+      this.trackSliderValue = next['Value'];
+      this.secToTime(next['Value']).then((result) => this.currDuration = result);
     }
   }
 
