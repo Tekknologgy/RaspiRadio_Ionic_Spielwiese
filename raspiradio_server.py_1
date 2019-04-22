@@ -8,39 +8,13 @@ import json
 import asyncio
 import websockets
 import ast
-import _thread
-import time              
-websocket_copy = set()
-ready = False
+
 # Create, configure & connect MPD
 client = MPDClient()
 client.timeout = 3
 client.connect("localhost", 6600)
 client.update
 
-#def start_loop(loop):
-def start_loop():
-    loop = asyncio.new_event_loop()
-    #asyncio.set_event_loop(loop)
-    loop.run_until_complete(updateElapsed())
-    loop.run_forever()
-
-async def updateElapsed():
-    try:
-        global client
-        global websocket_copy
-        while 1:
-            status = {}
-            status = client.status()
-            elapsed = status['elapsed']
-            command = {"Action": "newElapsed","Value": elapsed}
-            dumped_json = json.dumps(command)
-            for websocket in websocket_copy.copy():
-                await websocket.send(dumped_json)
-            #print("Update sent")
-            time.sleep(1)
-    except Exception as e:
-        print("Error: " + str(e))                     
 def send_state():
     try:
         status = {}
@@ -98,14 +72,6 @@ def send_state():
         return dumped_json
 
 async def hello(websocket, path):
-    global websocket_copy
-    global ready
-    websocket_copy.add(websocket)
-    #_thread.start_new_thread( updateElapsed, () )
-    #new_loop = asyncio.new_event_loop()
-    #_thread.start_new_thread( start_loop, (new_loop,) )
-    _thread.start_new_thread( start_loop, () )
-    #print("started")                         
     while True:
         try:
             # Websocket Nachricht empfangen & mit JSON parsen
@@ -173,8 +139,7 @@ async def hello(websocket, path):
                 #print('Next')
                 client.next()
                 if playlistlength == playlistlength[-1]:
-                    #client.play()
-                    client.pause()
+                    client.play()
                 await websocket.send(send_state())
 
             ###Previous
@@ -204,6 +169,7 @@ async def hello(websocket, path):
             if parsed_json['Action'] == "getState":
                 await websocket.send(send_state())
                 """
+                
                 """
 
             ###Random State ON
@@ -265,6 +231,8 @@ async def hello(websocket, path):
                     await websocket.send(send_state())
                 
             
+
+           
             ####New time on slidbar
             if parsed_json['Action'] == "setElapsed":
                 #print("setElapsed")
