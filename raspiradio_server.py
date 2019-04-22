@@ -77,6 +77,10 @@ async def hello(websocket, path):
             # Websocket Nachricht empfangen & mit JSON parsen
             command = await websocket.recv()
             parsed_json = json.loads(command)
+
+            status = {}
+            status = client.status()
+            playlistlength = status['playlistlength']
         
             # "Action" wird immer geschickt. Es enthält die
             # Information darüber, was zu tun ist... Dann werden
@@ -100,11 +104,13 @@ async def hello(websocket, path):
                 #print('JSON play')
                 try:
                     client.play(1)
+                    #await websocket.send(send_state())
 
                 except:
                     client.connect("localhost", 6600)
                     client.play(1)
                     #print("Exception")
+                    #await websocket.send(send_state())
 
             ### Pause
             if parsed_json['Action'] == "Pause":
@@ -130,8 +136,11 @@ async def hello(websocket, path):
 
             ### Next
             if parsed_json['Action'] == "Next":
-                #print("Next")
+                #print('Next')
                 client.next()
+                if playlistlength == playlistlength[-1]:
+                    #client.play()
+                    client.pause()
                 await websocket.send(send_state())
 
             ###Previous
@@ -161,65 +170,7 @@ async def hello(websocket, path):
             if parsed_json['Action'] == "getState":
                 await websocket.send(send_state())
                 """
-                #print("JSON GetState")
-                try:
-                    #print("try")
-                    status = {}
-                    status = client.status()
-                    randomstate = int(status['random'])
-                    repeatstate = int(status['repeat'])
-                    #print(status)
-                    
-                    ################################################################
-                    #Zuesrt Queue leeren, danach Playlist laden und in der Playlist 'song': 'X', für nötige Daten auslesen
-                    #'song' : 'X' = client.playlistid(INT)
-                    #mpc clear ###löscht alle Titel(und somit Playlist) im derzeitigen Queue
-                    #mpc load Testplaylist
-                    #mpc play
-                    
-                    ##print (status['playlist'])#String
-                    ##print(client.playlistid(0))
-                    ##songinfo_list = (status['playlist'])
-                    #songinfo_list = client.playlistid(int(16))
-                    #songinfo_list = client.playlist(status['playlist'])
-                    
-                    ###client.clear()
-                    ###client.load('Testplaylist')
-                    ###client.play()
-                    ##print(status)
-                    ##print(status['song'])
-                    #################################################################
-                    
-                    X = int(status['songid'])
-                    #print(X)
-                    songinfo_list = client.playlistid(X)#songid : Y
-                    #print(songinfo_list)
-                    songinfo_string = ''.join(str(e) for e in songinfo_list)
-                    #print(songinfo_string)
-                    songinfo = ast.literal_eval(songinfo_string)
-                    #print(songinfo)
-                    command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['elapsed']),"Volume": (status['volume']),"State": "Playing", "RandomState": (randomstate), "RepeatState": (repeatstate)}
-                    #print(command)
-                    dumped_json = json.dumps(command)
-                    await websocket.send(dumped_json)
-                    #print("JSON GetState send")
-
-                except:
-                    client.connect("localhost", 6600)
-                    status = {}
-                    status = client.status()
-                    randomstate = int(status['random'])
-                    repeatstate = int(status['repeat'])
-                    X = int(status['songid'])
-                    songinfo_list = client.playlistid(X)#songid : Y
-                    songinfo_string = ''.join(str(e) for e in songinfo_list)
-                    songinfo = ast.literal_eval(songinfo_string)
-                    command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['time']),"Volume": (status['volume']),"State": "Playing", "RandomState": (randomstate), "RepeatState": (repeatstate)}
-                    dumped_json = json.dumps(command)
-                    await websocket.send(dumped_json)
-                    #print("JSON GetState Exeption")
-
-                await send_State()
+                
                 """
 
             ###Random State ON
@@ -265,76 +216,24 @@ async def hello(websocket, path):
                     client.connect("localhost", 6600)
                     client.repeat(int(0))
                     #print("Repeat State OFF Exception")
-            """
-            ###Random
-            if parsed_json['Action'] == "Random":
-                #print("random")
-                try:
-                    #print("try")
-                    status = {}
-                    status = client.status()
-                    #print(status)
-                    randomstate = (status['random'])
-                    #print(randomstate)
-                    if randomstate == '0':
-                        client.random(int(1))
-                        #print("JSON random on")
-                        command = {"Action": "Random", "State": (randomstate)}
-                        #print(command)
-                        dumped_json = json.dumps(command)
-                        await websocket.send(dumped_json)
-                        #print(randomstate)
-                    elif randomstate == '1':
-                        client.random(int(0))
-                        #print("JSON random off")
-                        command = {"Action": "Random", "State": (randomstate)}
-                        #print(command)
-                        dumped_json = json.dumps(command)
-                        await websocket.send(dumped_json)
-                        #print(randomstate)
-                    else:
-                        print("Error Random")
-                        #print(randomstate)
 
-                except:
-                    client.connect("localhost", 6600)
-                    client.stop()
-                    print("Exception")
             
-            ###Repeat
-            if parsed_json['Action'] == "Repeat":
-                #print("Repeat")
-                try:
-                    #print("try")
-                    status = {}
-                    status = client.status()
-                    #print(status)
-                    repeatstate = (status['repeat'])
-                    #print(repeatstate)
-                    if repeatstate == '0':
-                        #client.repeat(int(1))
-                        print("JSON repeat on")
-                        command = {"Action": "Repeat", "State": (repeatstate)}
-                        #print(command)
-                        dumped_json = json.dumps(command)
-                        await websocket.send(dumped_json)
-                        #print(repeatstate)
-                    elif repeatstate == '1':
-                        client.repeat(int(0))
-                        command = {"Action": "Repeat", "State": (repeatstate)}
-                        #print(command)
-                        dumped_json = json.dumps(command)
-                        await websocket.send(dumped_json)
-                        #print(repeatstate)
-                    else:
-                        print("Error Repeat")
-                        #print(repeatstate)
+            ###Await websocket.send(send_state()) for ech new song
+            status = {}
+            status = client.status()
+            playlistlength = status['playlistlength']
+            elapsed = status['elapsed']
 
-                except:
-                    client.connect("localhost", 6600)
-                    client.stop()
-                    print("Exception")
-            """
+            for length in playlistlength: 
+                if playlistlength == playlistlength[-1]:
+                    #client.play()
+                    await websocket.send(send_state())
+                else:
+                    await websocket.send(send_state())
+                
+            
+
+           
             ####New time on slidbar
             if parsed_json['Action'] == "setElapsed":
                 #print("setElapsed")
