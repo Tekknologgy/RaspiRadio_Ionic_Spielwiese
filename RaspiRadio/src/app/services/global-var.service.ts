@@ -4,8 +4,19 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GlobalVarService {
- 
+  public playlist = [
+    {id:''},
+    {playlistname:''},
+    {playlistuser:''},
+    {tracks:''}
+  ];
+  public user=[
+    {id:''},
+    {username:''},
+    {bgcolor:''},
+    {playlistid:''}
+  ]
   constructor() { }
-  test1: any;
-  return(){this.test1}
+
+  return(){this.playlist,this.user}
 }

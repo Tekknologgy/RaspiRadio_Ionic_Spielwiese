@@ -15,5 +15,4 @@ public playListSong=[
 
   ngOnInit() {
   }
-
 }

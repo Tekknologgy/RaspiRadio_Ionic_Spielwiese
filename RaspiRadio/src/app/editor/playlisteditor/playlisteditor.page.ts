@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActionSheetController,NavController } from '@ionic/angular';
+import { GlobalVarService } from '../../services/global-var.service';
 
 @Component({
   selector: 'app-playlisteditor',
@@ -7,12 +8,12 @@ import { ActionSheetController,NavController } from '@ionic/angular';
   styleUrls: ['./playlisteditor.page.scss'],
 })
 export class PlaylisteditorPage implements OnInit {
-  public playList=[
-    {title:'playlist1',id:'1'},
-    {title:'playlist2',id:'2'},
-    {title:'playlist3',id:'3'}
-  ]
-  constructor(public actionCtrl: ActionSheetController, public navCtrl: NavController) { }
+
+  constructor(public globalVarService: GlobalVarService
+    ,public actionCtrl: ActionSheetController
+    ,public navCtrl: NavController) { 
+    //console.log(this.globalVarService.playlist);
+  }
   async optionPlaylist() {
     const actionSheet = await this.actionCtrl.create({
       header: 'Option',
@@ -50,8 +51,6 @@ export class PlaylisteditorPage implements OnInit {
     });
     await actionSheet.present();
   }
-
   ngOnInit() {
   }
-
 }

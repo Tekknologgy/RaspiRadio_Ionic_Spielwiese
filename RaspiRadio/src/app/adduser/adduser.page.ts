@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController } from '@ionic/angular';
 import { WebsocketService } from '../services/websocket.service';
+import { GlobalVarService } from '.././services/global-var.service';
 
 const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
 
@@ -13,31 +14,25 @@ export class AdduserPage implements OnInit {
 
   username:string;
   bg;
-  public user=[
-    {id:''},
-    {username:''},
-    {bgcolor:''},
-    {playlistid:''}
-  ]
   private mywebsocket;
 
   constructor(
-    public navCtrl : NavController,
-    private wsService: WebsocketService
+    public navCtrl : NavController
+    ,private wsService: WebsocketService
+    ,public globalVarService: GlobalVarService
   ) {}
   
   async getColor($event) { 
     this.bg = $event.target.id;
-    //await console.log($event.target.id);
   }
 
   async saveuser(){
-    this.user.push(
+    this.globalVarService.user.push(
       {id:'1'},
       {username:this.username},
       {bgcolor:this.bg}
     )
-    for(let e of this.user){
+    for(let e of this.globalVarService.user){
       console.log(e);
     }
 
@@ -47,6 +42,5 @@ export class AdduserPage implements OnInit {
 
   ngOnInit() {
     this.mywebsocket = this.wsService.connect(RaspiRadio_URL);
-
   }
 }
