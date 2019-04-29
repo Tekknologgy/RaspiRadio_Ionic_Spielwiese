@@ -12,6 +12,8 @@ const RaspiRadio_URL = "ws://teilchen.ddns.net:8765";
 })
 export class AdduserPage implements OnInit {
 
+  i;
+  maxUser:number = 0;
   username:string;
   bg;
   private mywebsocket;
@@ -27,17 +29,17 @@ export class AdduserPage implements OnInit {
   }
 
   async saveuser(){
-    this.globalVarService.user.push(
-      {id:'1'},
+    console.log(this.maxUser);
+    this.maxUser = this.globalVarService.user.length +1;
+    console.log(this.maxUser);
+/*    this.globalVarService.user.push(
+      {id:this.maxUser},
       {username:this.username},
       {bgcolor:this.bg}
-    )
-    for(let e of this.globalVarService.user){
-      console.log(e);
-    }
+    ) */
 
     var data = JSON.stringify({"Action": "AddUser","Name": this.username,"Color": this.bg});
-    this.mywebsocket.next(data);
+    //this.mywebsocket.next(data);
   }
 
   ngOnInit() {

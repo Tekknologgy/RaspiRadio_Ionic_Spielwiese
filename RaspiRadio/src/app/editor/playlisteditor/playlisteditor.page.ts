@@ -12,7 +12,6 @@ export class PlaylisteditorPage implements OnInit {
   constructor(public globalVarService: GlobalVarService
     ,public actionCtrl: ActionSheetController
     ,public navCtrl: NavController) { 
-    //console.log(this.globalVarService.playlist);
   }
   async optionPlaylist() {
     const actionSheet = await this.actionCtrl.create({
@@ -52,5 +51,7 @@ export class PlaylisteditorPage implements OnInit {
     await actionSheet.present();
   }
   ngOnInit() {
+    this.globalVarService.playlist;
+    console.log(this.globalVarService.playlist);
   }
 }

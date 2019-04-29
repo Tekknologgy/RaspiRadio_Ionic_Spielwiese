@@ -86,21 +86,6 @@ export class PlayerPage implements OnInit {
     }
   }
 
-  /*
-  //Die Funktion ist mit dem ebenfalls ausgeblendeten Button unterhalb der Tabs verbunden
-  async storage_test() {
-    this.storage.get('ip').then((val) => {
-      console.log('Your ip is ', val);
-      this.ip = val;
-    });
-    this.storage.get('port').then((val) => {
-      console.log('Your port is ', val);
-      this.port = val;
-    });
-    console.log("ws://" + this.ip + ":" + this.port);
-  }
-  */
-
   async trackSliderChanged() {
     this.secToTime(this.trackSliderValue).then((result) => this.currDuration = result);
     var data = {"Action": "setElapsed","newElapsed": this.trackSliderValue};
@@ -231,77 +216,19 @@ export class PlayerPage implements OnInit {
     }
 
     time = str_hours+":"+str_minutes+":"+str_seconds;
-
     return time;
   }
 
   async ngOnInit() {
     console.log("Player Loading...")
-    /*
-    //Das Storage braucht ein await, weil er sich sonst schon verbindet bevor er die URL hat.
-    //Das GET ist eine async Funktion und returned ein Promise, weswegen man den Wert erst aus den Promise lösen muss.
-    //Deswegen ist das ngOnInit jetzt auch ein async.
-    await this.storage.get('ip').then((val) => {
-      //console.log('Your ip is ', val);
-      this.ip = val;
-    });
-    await this.storage.get('port').then((val) => {
-      //console.log('Your port is ', val);
-      this.port = val;
-    });
-    this.RaspiRadio_URL = "ws://" + this.ip + ":" + this.port;  //Zusammensetzen der URL
-    */
 
     this.wsService.register(this);
-
     this.vol_Icon = 'volume-low';
     this.Playerstate = 'Play'; //zum testen für sebi
     this.Playerstate_label = 'Play';
     this.Playerstate_icon = 'play';
-
-    //this.mywebsocket = this.wsService.connect(this.RaspiRadio_URL);
-    // this.wsService.socket$.subscribe(
-    //   (next) => {
-    //     console.log(next);
-    //     if(next['Action'] == 'State') {
-    //       this.Songname = next['Title']; //Setzt den Songnamen
-    //       this.Interpret = next['Artist']; //Setzt den Interpreten
-    //       this.trackSliderMax = next['Duration']; //setzt den Maximalwert des Sliders in Sekunden
-    //       this.trackSliderValue = next['Elapsed'];  //setzt den Slider-Value damit der Slider an der aktuellen Abspielposition steht
-    //       this.volSliderValue = next['Volume']; //Setzt die Lautstärke
-    //       this.secToTime(next['Duration']).then((result) => this.Songduration = result) //setzt die Anzeige der Titeldauer rechts neben dem Slider
-    //       this.secToTime(next['Elapsed']).then((result) => this.currDuration = result);  //setzt den aktuellen Fortschritt des Titels links neben dem Slider
-    //       if(next['State'] == 'Playing') {
-    //         this.Playerstate = "Pause";
-    //       }
-    //       else if(next['State'] == 'Paused') {
-    //         this.Playerstate = "Play";
-    //       }
-
-    //       //Randomstatus
-    //       this.randomstatus = next['RandomState'];
-    //       if(this.randomstatus == 0) {
-    //         this.randomstyle = {'color': 'white'};
-    //       }
-    //       else {
-    //         this.randomstyle = {'color': 'lightgreen'};
-    //       }
-
-    //       //Repeatstatus
-    //       this.repeatstatus = next['RepeatState'];
-    //       if(this.repeatstatus == 0) {
-    //         this.repeatstyle = {'color': 'white'};
-    //       }
-    //       else {
-    //         this.repeatstyle = {'color': 'lightgreen'};
-    //       }
-
-    //     }
-    //   }
-    // )
   }
   async ngAfterViewInit() {
-    //await this.delay(500);
     var data = {"Action": "getState"};
     this.wsService.send(data);
   }

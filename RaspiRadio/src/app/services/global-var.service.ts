@@ -4,12 +4,13 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class GlobalVarService {
-  public playlist = [
-    {id:''},
-    {playlistname:''},
-    {playlistuser:''},
+  /*public playlist = [
+    {id:'1'},
+    {playlistname:'Default'},
+    {playlistuser:'Default'},
     {tracks:''}
-  ];
+  ];*/
+  playlist = 'cra';
   public user=[
     {id:''},
     {username:''},

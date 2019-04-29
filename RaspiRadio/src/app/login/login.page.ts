@@ -8,15 +8,12 @@ import { GlobalVarService, } from '../services/global-var.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-  user;
-  constructor() {}
+
+  maxUser;
+  constructor(public globalVarService: GlobalVarService) {}
+
 
   ngOnInit() {
-    
-    /*
-    for(let e of this.user){
-      console.log(e);
-    }
-    */
+    this.globalVarService.user;
   }
 }

@@ -30,32 +30,6 @@ export class HomePage {
     private router: Router
   ) {}
 
-  //Zu Beginn wird ein Ladebildschirm angezeigt
-
-  //Wenn IP & Port im Storage vorhanden sind, soll eine Nachricht an den Server geschickt werden.
-  //Wenn dieser mit einem OK antwortet, soll der Lade-Bildschirm verschwinden und sofort zum Player weitergeleitet werden.
-  
-  //Sind keine Daten im Storage, soll ein Connect über den Button ermöglicht werden. Dann sollen die Eingabefelder leer sein.
-  //Sind gespeicherte Daten vorhanden aber inkorrekt, dann soll eine Fehlermeldung angezeigt werden.
-  //Die Eingabefelder enthalten dann die gespeicherten inkorrekten Daten.
-
-  //Sind die Daten in den Eingabefeldern inkorrekt und es wird "Connect" geklickt, dann soll eine Fehlermeldung erscheinen
-  //und eine erneute Eingabe möglich sein.
-
-  //Nachdem die Anzeige aufgebaut wurde, wird zuerst die "Loading..." Animation gestartet und dann
-  //darauf gewartet dass das Storage bereit ist.
-  //Bevor die Funktion "conn_rasp" aufgerufen wird, werden noch eingehende Nachrichten am WebsocketService abonniert.
-  //Im conn_rasp wird dann unterschieden, ob die Funktion aus dem Init oder vom Button aufgerufen wurde.
-
-  //Die Funktion OnMessage ist die CallBack-Funktion die ausgeführt wird, sobald eine neue Nachricht am Websocket eingeht.
-  //Wenn eine Antwort vom Server eingeht, wird ein eventuell vorhandenes "Loading..." entfernt, die korrekten Daten im Storage
-  //gespeichert und dann zum Player weitergeleitet. Die Funktion OnMessage ist Public, damit man auf sie auch zugreifen kann,
-  //wenn man in einer anderen Page ist. Da Problem ist dass jede Page, die eingehende Nachrichten abonniert hat, neue Nachrichten
-  //erhält, auch wenn die Seite gerade nicht angezeigt wird. Ist man gerade am debuggen und lässt sich eingehende NAchrichten anzeigen
-  //erscheint jede eingehende Nachricht ein mal für jede Page die abonniert hat. Wenn allerdings der letzte Abonnent sein Abo kündigt,
-  //wird auch die Verbindung getrennt. Also muss man beim Seiten wechseln, zuerst die neue Seite abonnieren und dann von allen anderen
-  //Pages das Abo lösen.
-
   public OnMessage(message) {
     if((message["Action"] == "ConnTest") && (message["Response"] == "OK")) {
       console.log(`Incoming: ${JSON.stringify(message)}`);
@@ -115,24 +89,9 @@ export class HomePage {
     this.wsService.send(data);
   }
 
-  //Ist mit dem Button "Weiter zu Testzwecken" verbunden, welcher auskommentiert ist
-
   async weiter_test() {
     this.router.navigate(['/player']);
   }
-
-
-  //Ist verbunden mit dem storage_test Button
-  /*
-  async storage_test() {
-    this.storage.get('ip').then((val) => {
-      console.log('Your ip is ', val);
-    });
-    this.storage.get('port').then((val) => {
-      console.log('Your port is ', val);
-    });
-  }
-  */
 
   async err_report() {
     const alert = await this.alertCtrl.create({
@@ -159,13 +118,7 @@ export class HomePage {
   }
 
   async ngAfterViewInit() {
-    await this.storage.ready;
-    
-    //Dient nur zum Testen des Local Storage
-    //Wird es einkommentiert, dann wird bei Programmstart das Storage gelöscht.
-    // this.storage.remove("ip");
-    // this.storage.remove("port");
-    // this.storage.clear;
+    await this.storage.ready;  
     
     await this.show_loading("Loading...");  //zeige den Lade-Bildschirm
     this.wsService.register(this);
