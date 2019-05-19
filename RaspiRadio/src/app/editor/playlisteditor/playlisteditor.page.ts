@@ -8,7 +8,12 @@ import { GlobalVarService } from '../../services/global-var.service';
   styleUrls: ['./playlisteditor.page.scss'],
 })
 export class PlaylisteditorPage implements OnInit {
-
+  public playlist = [
+    {id:'1'},
+    {playlistname:'Default'},
+    {playlistuser:'Default'},
+    {tracks:''}
+  ]
   constructor(public globalVarService: GlobalVarService
     ,public actionCtrl: ActionSheetController
     ,public navCtrl: NavController) { 
@@ -51,7 +56,7 @@ export class PlaylisteditorPage implements OnInit {
     await actionSheet.present();
   }
   ngOnInit() {
-    this.globalVarService.playlist;
-    console.log(this.globalVarService.playlist);
+    //this.globalVarService.playlist;
+    //console.log(this.globalVarService.playlist);
   }
 }

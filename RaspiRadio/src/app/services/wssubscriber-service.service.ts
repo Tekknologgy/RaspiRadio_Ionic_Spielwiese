@@ -88,6 +88,7 @@ export class WSSubscriberService {
    */
   public send(message: { [key: string]: any; }) {
     this.ws.socket$.next(message);
+    console.log(`Outgoing: ${JSON.stringify(message)}`);
   }
 
   /* #endregion */

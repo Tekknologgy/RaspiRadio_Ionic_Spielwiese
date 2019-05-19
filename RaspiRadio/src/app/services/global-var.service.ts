@@ -10,7 +10,7 @@ export class GlobalVarService {
     {playlistuser:'Default'},
     {tracks:''}
   ];*/
-  playlist = 'cra';
+//  playlist = 'cra';
   public user=[
     {id:''},
     {username:''},
@@ -19,5 +19,5 @@ export class GlobalVarService {
   ]
   constructor() { }
 
-  return(){this.playlist,this.user}
+ // return(){this.playlist,this.user}
 }

@@ -32,6 +32,8 @@ export class PlayerPage implements OnInit {
   private repeatstatus;
   private randomstyle;
   private repeatstyle;
+  private volvalue = 0;
+  private trackSliderManuallyChanged = false;
 
   constructor(
     public alertCtrl: AlertController,
@@ -44,7 +46,7 @@ export class PlayerPage implements OnInit {
   ) {}
 
   public OnMessage(next) {
-    console.log(next);
+    console.log(`Incoming: ${JSON.stringify(next)}`);
     if(next['Action'] == 'State') {
       this.Songname = next['Title']; //Setzt den Songnamen
       this.Interpret = next['Artist']; //Setzt den Interpreten
@@ -80,19 +82,34 @@ export class PlayerPage implements OnInit {
         this.repeatstyle = {'color': 'lightgreen'};
       }
     }
+    //Ist notwendig, damit der Trackslider bei einem sekündlichen Update vom Server
+    //nicht unkontrolliert herumspringt... Beim auslösen von einem manuellen Setzen per Slider
+    //wird trackSliderManuallyChanged auf true gesetzt. Erst wenn der Server mit OK antwortet
+    //wird es wieder auf "True" gesetzt. In der Zwischenzeit wird ein sekündliches Update
+    //vom Server ignoriert.
+    if(next['Action'] == 'setElapsed') {
+      if(next['Response'] == "OK") {
+        this.trackSliderManuallyChanged = false;
+      }
+    }
     if(next['Action'] == 'newElapsed') {
-      this.trackSliderValue = next['Value'];
-      this.secToTime(next['Value']).then((result) => this.currDuration = result);
+      if(this.trackSliderManuallyChanged == false) {    //nur wenn der Trackslider NICHT manuell gesetzt wurde
+        this.trackSliderValue = next['Value'];
+        this.secToTime(next['Value']).then((result) => this.currDuration = result);
+      }
     }
   }
 
   async trackSliderChanged() {
+    this.trackSliderManuallyChanged = true;   //wird auf True gesetzt, damit ein sekündliches elapsed Update vom Server ignoriert wird
+    await this.delay(50);   //es hat sich herausgestellt, dass ngModel hin und wieder länger braucht um den neuen Wert zu speichern
     this.secToTime(this.trackSliderValue).then((result) => this.currDuration = result);
     var data = {"Action": "setElapsed","newElapsed": this.trackSliderValue};
     this.wsService.send(data);
   }
 
-  async volSliderChanged() {
+  async volSliderChanged(value) {
+    await this.delay(50);   //es hat sich herausgestellt, dass ngModel hin und wieder länger braucht um den neuen Wert zu speichern
     if(this.volSliderValue < 33) {
       this.vol_Icon = "volume-mute";
     }
