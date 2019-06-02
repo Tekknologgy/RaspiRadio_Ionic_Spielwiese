@@ -85,8 +85,8 @@ export class HomePage {
 
     this.wsService.subscribe("ws://" + this.ip + ":" + this.port);
     
-    //var data = {"Action": "ConnTest"};
-    //this.wsService.send(data);
+    var data = {"Action": "ConnTest"};
+    this.wsService.send(data);
   }
 
   async weiter_test() {
@@ -105,14 +105,14 @@ export class HomePage {
     });
     return await alert.present();
   }
-/*
+
   async show_loading(text: string) {
     this.loading = await this.loadingCtrl.create({
       message: text,
     });
     return await this.loading.present();
   }
-  */
+
   async delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
@@ -120,7 +120,7 @@ export class HomePage {
   async ngAfterViewInit() {
     await this.storage.ready;  
     
-    //await this.show_loading("Loading...");  //zeige den Lade-Bildschirm
+    await this.show_loading("Loading...");  //zeige den Lade-Bildschirm
     this.wsService.register(this);
     this.conn_rasp("OnInit"); //Ruft die Funktion conn_rasp() im Kontext "InInit" auf
   }

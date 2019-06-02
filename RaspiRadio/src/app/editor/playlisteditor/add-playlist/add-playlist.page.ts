@@ -7,9 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddPlaylistPage implements OnInit {
 public playListSong=[
-  {title:'Test',interpret:'testinterpret'},
-  {title:'Test2',interpret:'testinterpret2'},
-  {title:'Test3',interpret:'testinterpret3'}
+  {title:'Nothing Else Matters',interpret:'Metallica'},
+  {title:'Walk the Line',interpret:'Jonny Cash'},
+  {title:'Fight Fire with Fire',interpret:'Metallica'}
 ]
   constructor() { }
 

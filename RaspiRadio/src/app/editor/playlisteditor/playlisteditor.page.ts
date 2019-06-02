@@ -8,11 +8,10 @@ import { GlobalVarService } from '../../services/global-var.service';
   styleUrls: ['./playlisteditor.page.scss'],
 })
 export class PlaylisteditorPage implements OnInit {
-  public playlist = [
-    {id:'1'},
-    {playlistname:'Default'},
-    {playlistuser:'Default'},
-    {tracks:''}
+  public playList=[
+    {title:'ambient'},
+    {title:'rock'},
+    {title:'country'}
   ]
   constructor(public globalVarService: GlobalVarService
     ,public actionCtrl: ActionSheetController

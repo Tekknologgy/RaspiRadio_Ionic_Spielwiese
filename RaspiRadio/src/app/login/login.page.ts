@@ -8,7 +8,11 @@ import { GlobalVarService, } from '../services/global-var.service';
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
+  public user=[
+    {name:'User1'},
+    {name:'User2'},
+    {name:'User3'}
+  ]
   maxUser;
   constructor(public globalVarService: GlobalVarService) {}
 
