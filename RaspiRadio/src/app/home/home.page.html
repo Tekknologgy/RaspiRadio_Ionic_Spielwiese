@@ -5,13 +5,13 @@
 </ion-header>
 
 <ion-content padding text-center>
-  <h4>Enter Connection<br>Information</h4>
+  <h4  style="color:white;"class="lbl_login">Enter Connection<br>Information</h4>
   <ion-item lines="none">
-    <ion-label position="stacked">IP-Address</ion-label>
+    <ion-label style="color:white;" class="lbl_login" position="stacked">IP-Address</ion-label>
     <ion-input type="text" placeholder="e.g. 192.168.1.20" [(ngModel)]="ip" id="ip" class="input"></ion-input>
   </ion-item>
   <ion-item lines="none">
-    <ion-label position="stacked">Port</ion-label>
+    <ion-label style="color:white;" class="lbl_login" position="stacked">Port</ion-label>
     <ion-input type="number" placeholder="e.g. 8800" [(ngModel)]="port" id="port" class="input"></ion-input>
   </ion-item>
   <ion-button (click)="conn_rasp('Button')" class="button">Connect</ion-button>
