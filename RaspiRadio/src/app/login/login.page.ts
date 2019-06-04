@@ -9,9 +9,9 @@ import { GlobalVarService, } from '../services/global-var.service';
 })
 export class LoginPage implements OnInit {
   public user=[
-    {name:'User1'},
-    {name:'User2'},
-    {name:'User3'}
+    {name:'Hautz Sebastian'},
+    {name:'Lehner Roland'},
+    {name:'Nessel Markus'}
   ]
   maxUser;
   constructor(public globalVarService: GlobalVarService) {}
