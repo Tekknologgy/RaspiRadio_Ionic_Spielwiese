@@ -85,8 +85,8 @@ export class HomePage {
 
     this.wsService.subscribe("ws://" + this.ip + ":" + this.port);
     
-    //var data = {"Action": "ConnTest"};
-    //this.wsService.send(data);
+    var data = {"Action": "ConnTest"};
+    this.wsService.send(data);
   }
 
   async weiter_test() {
