@@ -10,8 +10,9 @@
 <ion-content>
     <ion-list *ngFor="let p of user">
       <ion-item>
-        <ion-label>{{p.name}}</ion-label>
+        <ion-label color="light">{{p.name}}</ion-label>
       </ion-item>
   </ion-list>
+  <br>
   <ion-button href="/adduser" class="button">Add User</ion-button>
 </ion-content>
