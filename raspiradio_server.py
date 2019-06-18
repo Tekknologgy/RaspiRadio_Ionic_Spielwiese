@@ -45,9 +45,8 @@ mpd_port = 6600
 ########################
 USERS = set()
 client = MPDClient()
-updateElapsedRunning = False
+updateRunning = False
 checkSongChangedRunning = False
-newElapsed = False
 
 ###############
 ### Logging ###
@@ -57,7 +56,6 @@ def debug(message):
     # Get the previous frame in the stack, otherwise it would
     # be this function!!!
     func = inspect.currentframe().f_back.f_code
-    #tb = sys.exc_info()[2]
     
     # Dump the message + the name of this function to the log.
     logging.debug("%s: %s in %s:%i" % (
@@ -72,7 +70,6 @@ def error(message, lineno):
     # Get the previous frame in the stack, otherwise it would
     # be this function!!!
     func = inspect.currentframe().f_back.f_code
-    #tb = sys.exc_info()[2]
     # Dump the message + the name of this function to the log.
     logging.error("%s: %s in %s:%i raised in line %s" % (
         message, 
@@ -150,10 +147,8 @@ async def send_message(message):
 
 async def ws_server(websocket, path):
     await register(websocket)
-    if updateElapsedRunning == False:
-        _thread.start_new_thread(updateElapsedThread, ())
-    if checkSongChangedRunning == False:
-        _thread.start_new_thread(SongChangedThread, ())
+    if updateRunning == False:
+        _thread.start_new_thread(updateThread, ())
     try:
         async for message in websocket:
             if await check_json(message) == True:
@@ -179,16 +174,10 @@ async def ws_server(websocket, path):
                     elif data_r['Action'] == "setVolume":
                         if await dict_keycheck(data_r, "newVolume") == True:
                             await setVolume(data_r['newVolume'])
-                    ### Play
-                    elif data_r['Action'] == "Play":
-                        await Play()
                     ### Pause
                     elif data_r['Action'] == "Pause":
                         if await dict_keycheck(data_r, "PauseStatus") == True:
                             await Pause(data_r['PauseStatus'])
-                    ### Stop
-                    elif data_r['Action'] == "Stop":
-                        await Stop()
                     ### Next
                     elif data_r['Action'] == "Next":
                         await Next()
@@ -198,7 +187,6 @@ async def ws_server(websocket, path):
                     ### setElapsed
                     elif data_r['Action'] == "setElapsed":
                         if await dict_keycheck(data_r, "newElapsed") == True:
-                            newElapsed = True
                             await setElapsed(data_r['newElapsed'])
                     ### Random
                     elif data_r['Action'] == "Random":
@@ -286,32 +274,17 @@ async def ConnTest():
 async def sendState():
     global client
     try:
-        # commented lines with print arent debug() messages because
-        # there is a debug message for all sent messages in the
-        # send_message() function.
         await check_mpd()
         status = {}
         status = client.status()
-        #print("Status: " + str(status))
-        
         randomstate = int(status['random'])
-        #print("Randomstate: " + str(randomstate))
-        
         repeatstate = int(status['repeat'])
-        #print("Repeatstate: " + str(repeatstate))
-        
         X = int(status['songid'])
         songinfo_list = client.playlistid(X)
         songinfo_string = ''.join(str(e) for e in songinfo_list)
         songinfo = ast.literal_eval(songinfo_string)
-        #print("SongInfo: " + str(songinfo))
-        
         state = status['state']
-        #print("State: " + str(state))
-        
         command = {"Action": "State", "Title": (songinfo['title']), "Artist": (songinfo['artist']), "Duration": (songinfo['time']), "Elapsed": (status['elapsed']),"Volume": (status['volume']),"State": state, "RandomState": (randomstate), "RepeatState": (repeatstate)}
-        #print("Command: " + str(command))
-        
         data_s = json.dumps(command)
         await send_message(data_s)
     except MPDError as mpde:
@@ -326,18 +299,9 @@ async def setVolume(newVolume):
     try:
         await check_mpd()
         client.setvol(int(newVolume))
-    except MPDError as mpde:
-        lineno = sys.exc_info()[-1].tb_lineno
-        error("MPDError: " + str(mpde), lineno)
-    except Exception as e:
-        lineno = sys.exc_info()[-1].tb_lineno
-        error(str(e), lineno)
-
-async def Play():
-    global client
-    try:
-        await check_mpd()
-        client.play(1)
+        message = {"Action": "setVolume","Response": int(newVolume)}
+        data_s = json.dumps(message)
+        await send_message(data_s)
     except MPDError as mpde:
         lineno = sys.exc_info()[-1].tb_lineno
         error("MPDError: " + str(mpde), lineno)
@@ -350,18 +314,9 @@ async def Pause(PauseStatus):
     try:
         await check_mpd()
         client.pause(int(PauseStatus))
-    except MPDError as mpde:
-        lineno = sys.exc_info()[-1].tb_lineno
-        error("MPDError: " + str(mpde), lineno)
-    except Exception as e:
-        lineno = sys.exc_info()[-1].tb_lineno
-        error(str(e), lineno)
-
-async def Stop():
-    global client
-    try:
-        await check_mpd()
-        client.stop()
+        message = {"Action": "Pause","Response": int(PauseStatus)}
+        data_s = json.dumps(message)
+        await send_message(data_s)
     except MPDError as mpde:
         lineno = sys.exc_info()[-1].tb_lineno
         error("MPDError: " + str(mpde), lineno)
@@ -400,16 +355,12 @@ async def Previous():
         error(str(e), lineno)
 
 async def setElapsed(newElapsedTime):
-    global newElapsed
     try:
         await check_mpd()
-        #print(int(round(newElapsedTime)))
         client.seekcur(int(round(newElapsedTime)))
-        message = {"Action": "setElapsed","Response": "OK"}
+        message = {"Action": "setElapsed","Response": int(round(newElapsedTime))}
         data_s = json.dumps(message)
         await send_message(data_s)
-        #time.sleep(1)
-        newElapsed = False
     except MPDError as mpde:
         lineno = sys.exc_info()[-1].tb_lineno
         error("MPDError: " + str(mpde), lineno)
@@ -425,6 +376,9 @@ async def Random(newstate):
     try:
         await check_mpd()
         client.random(int(newstate))
+        message = {"Action": "Random","Response": int(newstate)}
+        data_s = json.dumps(message)
+        await send_message(data_s)
     except MPDError as mpde:
         lineno = sys.exc_info()[-1].tb_lineno
         error("MPDError: " + str(mpde), lineno)
@@ -436,6 +390,9 @@ async def Repeat(newstate):
     try:
         await check_mpd()
         client.repeat(int(newstate))
+        message = {"Action": "Repeat","Response": int(newstate)}
+        data_s = json.dumps(message)
+        await send_message(data_s)
     except MPDError as mpde:
         lineno = sys.exc_info()[-1].tb_lineno
         error("MPDError: " + str(mpde), lineno)
@@ -450,14 +407,10 @@ async def AddUser(username, color):
     # a text file instead of writing in a mysql database
     try:
         data = username + "," + color + "\n"
-        #print("JSON Adduser nach json_parse")
         path = '/home/pi/Python-Scripts/Userdatabase.txt'
-        #users_file = open(path, 'r+')
         users_file = open(path, 'a')
-        #print("JSON Adduser nach erstellung der  txt")
         users_file.write(data)
         users_file.close()
-        #print("JSON Adduser")
     except Exception as e:
         lineno = sys.exc_info()[-1].tb_lineno
         error(str(e), lineno)
@@ -467,60 +420,21 @@ async def AddUser(username, color):
 #######################
 ### Looping threads ###
 #######################
-def updateElapsedThread():
+def updateThread():
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(updateElapsed())
+    loop.run_until_complete(update())
     loop.run_forever()
 
-async def updateElapsed():
+async def update():
     try:
-        global client
-        global newElapsed
-        global updateElapsedRunning
-        updateElapsedRunning = True
+        updateRunning = True
         while 1:
-            if newElapsed == False:
-                await check_mpd()
-                status = {}
-                status = client.status()
-                elapsed = status['elapsed']
-                command = {"Action": "newElapsed","Value": elapsed}
-                data_s = json.dumps(command)
-                await send_message(data_s)
-                #debug("updateElapsed: " + str(command))
-                #print("update")
-            #else:
-                #print("übersprungen")
+            await sendState()
             time.sleep(1)
     except Exception as e:
         lineno = sys.exc_info()[-1].tb_lineno
         error(str(e), lineno)
         updateElapsedRunning = False
-
-def SongChangedThread():
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(checkSongChanged())
-    loop.run_forever()
-
-async def checkSongChanged():
-    try:
-        global client
-        global checkSongChangedRunning
-        checkSongChangedRunning = True
-        oldsongid = 0
-        while 1:
-            await check_mpd()
-            status = {}
-            status = client.status()
-            if await dict_keycheck(status, "songid") == True:
-                if int(status["songid"]) != oldsongid:
-                    await sendState()
-                    oldsongid = int(status["songid"])
-            time.sleep(1)
-    except Exception as e:
-        lineno = sys.exc_info()[-1].tb_lineno
-        error(str(e), lineno)
-        checkSongChangedRunning = False
 
 ############
 ### Main ###
